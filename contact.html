@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — LeadIntel CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181D; --slate:#262A33; --amber:#2E7CF6; --amber-deep:#1A63D6; --green:#1FA67A;
+    --paper:#FFFFFF; --mist:#F6F7FA; --line:#E3E7ED; --line-soft:#EDEFF3; --muted:#5B6B80; --muted-soft:#8492A3;
+    --display:'Space Grotesk', sans-serif; --body:'Inter', sans-serif; --mono:'JetBrains Mono', monospace;
+    --container:1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--body); color:var(--ink); background:var(--paper); -webkit-font-smoothing:antialiased;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:var(--container); margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  .nav{position:sticky; top:0; z-index:100; background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:17px; color:var(--ink);}
+  .brand-mark{width:30px;height:30px;border-radius:7px; background:var(--ink); position:relative; flex-shrink:0;}
+  .brand-mark::after{content:''; position:absolute; top:10px; left:10px; width:10px;height:10px;border-radius:50%; background:var(--amber);}
+  .nav-links{display:none; gap:36px; font-size:14.5px; font-weight:500; color:var(--slate);}
+  @media (min-width:780px){ .nav-links{display:flex;} }
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:700; font-size:15px; padding:13px 24px; border-radius:8px; transition:transform .12s, background .12s;}
+  .btn-primary{background:var(--amber); color:var(--ink); box-shadow:0 1px 0 rgba(0,0,0,0.05), 0 6px 16px -6px rgba(46,124,246,0.55);}
+  .btn-primary:hover{background:var(--amber-deep); transform:translateY(-1px);}
+  .btn-outline{background:#fff; border:1.5px solid var(--line); color:var(--ink);}
+  .btn-outline:hover{border-color:var(--ink); background:var(--mist);}
+  .btn-sm{padding:10px 18px; font-size:14px; border-radius:7px;}
+
+  .hero{background:var(--ink); padding:72px 0 64px; text-align:center;}
+  .hero .eyebrow{font-family:var(--mono); font-size:12.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--amber); margin-bottom:18px;}
+  .hero h1{font-family:var(--display); font-weight:700; color:#fff; font-size:clamp(30px,4.5vw,46px); line-height:1.1;}
+  .hero p{margin-top:16px; font-size:17px; color:#C3CDDB; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6;}
+
+  section{padding:0 0 80px;}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:880px; margin:-40px auto 0; position:relative; z-index:2;}
+  @media (max-width:780px){ .contact-grid{grid-template-columns:1fr;} }
+
+  .contact-card{
+    background:#fff; border:1px solid var(--line); border-radius:16px; padding:36px 32px;
+    box-shadow:0 24px 50px -28px rgba(15,30,51,0.18); display:flex; flex-direction:column;
+  }
+  .contact-card .ico{width:48px; height:48px; border-radius:10px; background:var(--ink); display:flex; align-items:center; justify-content:center; margin-bottom:20px;}
+  .contact-card.accent .ico{background:var(--amber);}
+  .contact-card h3{font-family:var(--display); font-size:19px; font-weight:700; margin-bottom:10px;}
+  .contact-card p{font-size:14.5px; color:var(--muted); line-height:1.6; margin-bottom:24px; flex:1;}
+  .contact-card .btn{width:100%;}
+
+  .contact-note{max-width:680px; margin:48px auto 0; text-align:center; font-size:14px; color:var(--muted-soft);}
+
+  footer{background:#0C1729; padding:48px 0 32px;}
+  .foot-bottom{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--muted-soft);}
+  .foot-bottom a{color:#C3CDDB;}
+  .foot-bottom a:hover{color:#fff;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="brand"><span class="brand-mark" style="overflow:hidden; padding:0;"><img src="logo.png" alt="" style="width:30px; height:30px; object-fit:cover; object-position:25% 20%; display:block;"></span>LeadIntel CRM</a>
+    <div class="nav-links">
+      <a href="index.html#problem">Problem</a>
+      <a href="index.html#how-it-works">How it Works</a>
+      <a href="index.html#features">Features</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+    <a class="btn btn-primary btn-sm" href="#" id="navBookDemo">Book a Demo</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">GET IN TOUCH</div>
+    <h1>Let's talk.</h1>
+    <p>Whether you've got a quick question or you're ready to see it in action — here's how to reach us.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-card accent">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="white" stroke-width="1.6"/><path d="M3 7L12 13L21 7" stroke="white" stroke-width="1.6"/></svg>
+        </div>
+        <h3>Book a Demo</h3>
+        <p>See the dashboard, the AI scoring, and the alerts live — 15 minutes, no pressure, and you'll leave with a real price for your business.</p>
+        <a class="btn btn-primary" href="#" id="cardBookDemo">Pick a Time</a>
+      </div>
+      <div class="contact-card">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 8V16C21 17.1 20.1 18 19 18H5C3.9 18 3 17.1 3 16V8M21 8C21 6.9 20.1 6 19 6H5C3.9 6 3 6.9 3 8M21 8L13 13C12.4 13.4 11.6 13.4 11 13L3 8" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Email Us</h3>
+        <p>Got a question first, or just want to reach out before booking a call? We read every message and reply quickly.</p>
+        <a class="btn btn-outline" href="mailto:hello@leadintelcrm.com">hello@leadintelcrm.com</a>
+      </div>
+    </div>
+
+    <p class="contact-note">We typically respond within one business day. For urgent matters, booking a demo call is usually the fastest way to talk things through directly.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-bottom">
+      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
+      <span><a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const CALENDLY_URL = "https://calendly.com/juneflows26/30min";
+  ['navBookDemo', 'cardBookDemo'].forEach(id => {
+    const btn = document.getElementById(id);
+    if(btn) btn.addEventListener('click', (e) => { e.preventDefault(); window.open(CALENDLY_URL, '_blank'); });
+  });
+</script>
+
+</body>
+</html>
