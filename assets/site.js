@@ -11,15 +11,29 @@
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- Nav: elevated state on scroll ---------- */
+  /* ---------- Scroll-linked effects (one rAF-throttled handler):
+     nav elevation, reading-progress bar, hero drift ---------- */
   var nav = document.querySelector('.nav');
-  if (nav) {
-    var onScroll = function () {
-      nav.classList.toggle('is-scrolled', window.scrollY > 8);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-  }
+  var progressBar = document.getElementById('scrollProgress');
+  var heroInner = document.querySelector('.hero-inner');
+  var heroDriftMQ = window.matchMedia('(min-width: 980px)');
+
+  var onScroll = function () {
+    var y = window.scrollY;
+    if (nav) nav.classList.toggle('is-scrolled', y > 8);
+    if (progressBar) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.transform = 'scaleX(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')';
+    }
+    if (heroInner && !reducedMotion && heroDriftMQ.matches) {
+      // gentle parallax: hero content drifts up and fades as you scroll away
+      var d = Math.min(y, 720);
+      heroInner.style.transform = 'translateY(' + d * 0.14 + 'px)';
+      heroInner.style.opacity = Math.max(1 - d / 860, 0);
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   /* ---------- Mobile menu ---------- */
   var burger = document.getElementById('navBurger');
@@ -158,6 +172,7 @@
         email: document.getElementById('f-email').value.trim(),
         phone: document.getElementById('f-phone').value.trim(),
         business_name: document.getElementById('f-business').value.trim(),
+        website: document.getElementById('f-website').value.trim(),
         trade: document.getElementById('f-trade').value.trim(),
         lead_volume: document.getElementById('f-volume').value.trim(),
         current_process: document.getElementById('f-process').value.trim(),

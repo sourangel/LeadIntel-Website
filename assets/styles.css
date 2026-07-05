@@ -90,11 +90,16 @@ ul{list-style:none;}
    ============================================================ */
 html.js [data-reveal]{
   opacity:0;
-  transform:translateY(26px);
-  transition:opacity .75s var(--ease), transform .75s var(--ease);
+  transform:translateY(36px);
+  transition:opacity .9s var(--ease), transform .9s var(--ease);
   transition-delay:var(--reveal-delay, 0s);
   will-change:opacity, transform;
 }
+/* directional variants for choreographed sections */
+html.js [data-reveal="left"]{transform:translateX(-48px);}
+html.js [data-reveal="right"]{transform:translateX(48px);}
+html.js [data-reveal="zoom"]{transform:translateY(26px) scale(0.94);}
+html.js [data-reveal="fade"]{transform:none;}
 html.js [data-reveal].is-in{
   opacity:1;
   transform:none;
@@ -104,16 +109,26 @@ html.js [data-reveal].is-in{
 /* hero entrance: plays on load, no observer needed */
 html.js .enter{
   opacity:0;
-  transform:translateY(22px);
-  animation:enterUp .85s var(--ease) forwards;
+  transform:translateY(26px);
+  filter:blur(10px);
+  animation:enterUp .95s var(--ease) forwards;
   animation-delay:var(--enter-delay, 0s);
 }
-@keyframes enterUp{ to{opacity:1;transform:none;} }
+@keyframes enterUp{ to{opacity:1;transform:none;filter:blur(0);} }
+
+/* thin reading-progress line above the nav (index) */
+.scroll-progress{
+  position:fixed;top:0;left:0;right:0;height:2.5px;z-index:120;
+  background:linear-gradient(90deg, var(--blue-bright), var(--blue));
+  transform:scaleX(0);transform-origin:left;
+  pointer-events:none;
+}
 
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
   html.js [data-reveal]{opacity:1;transform:none;}
-  html.js .enter{opacity:1;transform:none;animation:none;}
+  html.js .enter{opacity:1;transform:none;filter:none;animation:none;}
+  .scroll-progress{display:none;}
 }
 
 /* ============================================================
@@ -436,6 +451,10 @@ section{padding:104px 0;}
 
 .sec-head{max-width:700px;margin-bottom:60px;}
 .sec-head .eyebrow{color:var(--blue-deep);margin-bottom:16px;}
+.sec-head .eyebrow::before{
+  content:'';width:26px;height:1.5px;border-radius:1px;
+  background:currentColor;opacity:.55;flex-shrink:0;
+}
 .sec-head h2{
   font-family:var(--display);font-weight:700;
   font-size:clamp(29px,3.8vw,42px);
@@ -837,6 +856,7 @@ footer{background:#080C13;padding:64px 0 36px;border-top:1px solid var(--dark-li
 @media (max-width:520px){ .form-grid{grid-template-columns:1fr;} }
 
 .field label{display:block;font-size:12.5px;font-weight:600;color:var(--slate);margin-bottom:7px;}
+.field .label-optional{font-weight:500;color:var(--muted-soft);}
 .field input, .field select, .field textarea{
   width:100%;font-family:var(--body);font-size:14.5px;
   padding:12px 14px;
