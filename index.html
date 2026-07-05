@@ -4,710 +4,65 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contractor Lead Intelligence CRM — Never Lose a Lead to Lag</title>
+<meta name="description" content="LeadIntel CRM scores, ranks, and routes every inbound lead the second it lands — so contractors stop losing jobs to slow follow-up.">
+<link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-
-  /* ============ TOKENS ============ */
-  :root{
-    --ink:#16181D;          /* near-charcoal - primary */
-    --slate:#262A33;        /* secondary charcoal */
-    --slate-soft:#4A5160;
-    --amber:#2E7CF6;        /* electric blue accent */
-    --amber-deep:#1A63D6;
-    --green:#1FA67A;        /* confirmed state */
-    --paper:#FFFFFF;
-    --mist:#F6F7FA;         /* section break */
-    --line:#E3E7ED;
-    --line-soft:#EDEFF3;
-    --muted:#5B6B80;
-    --muted-soft:#8492A3;
-
-    --display: 'Space Grotesk', sans-serif;
-    --body: 'Inter', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
-
-    --container: 1180px;
-  }
-
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:var(--body);
-    color:var(--ink);
-    background:var(--paper);
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  img,svg{display:block;max-width:100%;}
-  a{color:inherit;text-decoration:none;}
-  button{font-family:inherit;cursor:pointer;border:none;background:none;}
-  ul{list-style:none;}
-
-  :focus-visible{
-    outline:2px solid var(--amber);
-    outline-offset:3px;
-    border-radius:4px;
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
-  }
-
-  .wrap{
-    max-width:var(--container);
-    margin:0 auto;
-    padding:0 32px;
-  }
-  @media (max-width:640px){ .wrap{padding:0 20px;} }
-
-  .eyebrow{
-    font-family:var(--mono);
-    font-size:12.5px;
-    font-weight:600;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-  }
-
-  /* generic reveal-on-scroll */
-  .reveal{
-    opacity:0;
-    transform:translateY(14px);
-    transition:opacity .5s cubic-bezier(.2,.7,.3,1), transform .5s cubic-bezier(.2,.7,.3,1);
-  }
-  .reveal.in{opacity:1; transform:translateY(0);}
-
-  /* ============ NAV ============ */
-  .nav{
-    position:sticky; top:0; z-index:100;
-    background:rgba(255,255,255,0.88);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    height:72px;
-  }
-  .brand{
-    display:flex; align-items:center; gap:10px;
-    font-family:var(--display);
-    font-weight:700;
-    font-size:17px;
-    color:var(--ink);
-  }
-  .brand-mark{
-    width:30px;height:30px;border-radius:7px;
-    background:var(--ink);
-    display:flex;align-items:center;justify-content:center;
-    position:relative;
-    flex-shrink:0;
-  }
-  .brand-mark::after{
-    content:'';
-    width:10px;height:10px;border-radius:50%;
-    background:var(--amber);
-    box-shadow:0 0 0 0 rgba(46,124,246,0.6);
-    animation:pulseDot 2.2s ease-out infinite;
-  }
-  @keyframes pulseDot{
-    0%{box-shadow:0 0 0 0 rgba(46,124,246,0.55);}
-    70%{box-shadow:0 0 0 7px rgba(46,124,246,0);}
-    100%{box-shadow:0 0 0 0 rgba(46,124,246,0);}
-  }
-  .nav-links{
-    display:none;
-    gap:36px;
-    font-size:14.5px; font-weight:500;
-    color:var(--slate);
-  }
-  @media (min-width:780px){ .nav-links{ display:flex; } }
-  .nav-links a{ position:relative; padding:4px 0; transition:color .15s; }
-  .nav-links a:hover{ color:var(--ink); }
-  .nav-links a::after{
-    content:''; position:absolute; left:0; bottom:-2px; height:2px; width:0;
-    background:var(--amber); transition:width .18s ease;
-  }
-  .nav-links a:hover::after{ width:100%; }
-  .nav-cta{ display:flex; align-items:center; gap:18px; }
-  .nav-cta .ghost-link{ font-size:14.5px; font-weight:600; color:var(--ink); display:none; }
-  @media (min-width:880px){ .nav-cta .ghost-link{ display:inline; } }
-
-  /* ============ BUTTONS ============ */
-  .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    font-family:var(--body);
-    font-weight:700;
-    font-size:15px;
-    padding:13px 24px;
-    border-radius:8px;
-    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
-    white-space:nowrap;
-  }
-  .btn-primary{
-    background:var(--amber);
-    color:var(--ink);
-    box-shadow:0 1px 0 rgba(0,0,0,0.05), 0 6px 16px -6px rgba(46,124,246,0.55);
-  }
-  .btn-primary:hover{ background:var(--amber-deep); transform:translateY(-1px); box-shadow:0 10px 20px -8px rgba(46,124,246,0.6); }
-  .btn-primary:active{ transform:translateY(0); }
-  .btn-dark{
-    background:var(--ink); color:#fff;
-  }
-  .btn-dark:hover{ background:var(--slate); transform:translateY(-1px); }
-  .btn-outline{
-    background:transparent;
-    border:1.5px solid var(--line);
-    color:var(--ink);
-  }
-  .btn-outline:hover{ border-color:var(--ink); background:var(--mist); }
-  .btn-sm{ padding:10px 18px; font-size:14px; border-radius:7px; }
-
-  /* ============ HERO ============ */
-  .hero{
-    background:var(--ink);
-    position:relative;
-    overflow:hidden;
-    padding:88px 0 0;
-  }
-  .hero::before{ /* faint grid texture, technical feel */
-    content:'';
-    position:absolute; inset:0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
-    background-size:42px 42px;
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 75%);
-    pointer-events:none;
-  }
-  .hero-glow{
-    position:absolute; top:-160px; right:-120px;
-    width:560px; height:560px; border-radius:50%;
-    background:radial-gradient(circle, rgba(46,124,246,0.18), transparent 70%);
-    pointer-events:none;
-  }
-  .hero-inner{
-    position:relative; z-index:2;
-    display:grid;
-    grid-template-columns:1.05fr 0.95fr;
-    gap:56px;
-    align-items:center;
-    padding-bottom:84px;
-  }
-  @media (max-width:980px){
-    .hero-inner{ grid-template-columns:1fr; gap:48px; padding-bottom:56px; }
-  }
-
-  .hero-eyebrow{ color:var(--amber); margin-bottom:22px; }
-  .hero-eyebrow .dot{ width:6px;height:6px;border-radius:50%;background:var(--amber); }
-
-  .hero h1{
-    font-family:var(--display);
-    font-weight:700;
-    color:#fff;
-    font-size:clamp(34px, 5vw, 56px);
-    line-height:1.06;
-    letter-spacing:-0.015em;
-    max-width:620px;
-  }
-  .hero h1 em{
-    font-style:normal;
-    color:var(--amber);
-  }
-  .hero-sub{
-    margin-top:22px;
-    font-size:18px;
-    line-height:1.6;
-    color:#C3CDDB;
-    max-width:520px;
-  }
-  .hero-actions{
-    margin-top:34px;
-    display:flex;
-    align-items:center;
-    gap:16px;
-    flex-wrap:wrap;
-  }
-  .hero-actions .btn-primary{ padding:15px 28px; font-size:16px; }
-  .hero-note{
-    margin-top:18px;
-    font-size:13px;
-    color:var(--muted-soft);
-    font-family:var(--mono);
-  }
-
-  .hero-stats{
-    display:flex; gap:34px;
-    margin-top:48px;
-    padding-top:28px;
-    border-top:1px solid rgba(255,255,255,0.12);
-    max-width:560px;
-    flex-wrap:wrap;
-  }
-  @media (max-width:480px){ .hero-stats{ gap:24px; } }
-  .hero-stat b{
-    display:block;
-    font-family:var(--display);
-    font-size:26px;
-    color:#fff;
-    font-weight:700;
-  }
-  .hero-stat span{
-    font-size:12.5px;
-    color:var(--muted-soft);
-  }
-
-  /* ---- signature element: live lead ticker card ---- */
-  .ticker-card{
-    background:#0C1729;
-    border:1px solid rgba(255,255,255,0.10);
-    border-radius:16px;
-    padding:22px;
-    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
-    position:relative;
-  }
-  .ticker-head{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:18px;
-  }
-  .ticker-head .label{
-    font-family:var(--mono); font-size:12px; letter-spacing:0.08em;
-    color:var(--muted-soft); text-transform:uppercase;
-  }
-  .ticker-head .live{
-    display:flex; align-items:center; gap:6px;
-    font-family:var(--mono); font-size:11.5px; color:var(--green);
-  }
-  .ticker-head .live .ld{
-    width:6px;height:6px;border-radius:50%;background:var(--green);
-    animation:pulseDot2 1.6s infinite;
-  }
-  @keyframes pulseDot2{
-    0%,100%{opacity:1;} 50%{opacity:0.3;}
-  }
-
-  .lead-row{
-    display:flex; align-items:center; gap:14px;
-    background:rgba(255,255,255,0.035);
-    border:1px solid rgba(255,255,255,0.07);
-    border-radius:10px;
-    padding:14px 16px;
-    margin-bottom:10px;
-  }
-  .lead-row:last-child{ margin-bottom:0; }
-  .lead-avatar{
-    width:36px;height:36px;border-radius:8px;
-    background:var(--slate);
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--mono); font-size:12px; font-weight:600; color:#fff;
-    flex-shrink:0;
-  }
-  .lead-info{ flex:1; min-width:0; }
-  .lead-info .nm{ font-size:14px; font-weight:600; color:#fff; }
-  .lead-info .jb{ font-size:12.5px; color:var(--muted-soft); margin-top:1px; }
-  .lead-score{
-    font-family:var(--mono);
-    font-size:13px;
-    font-weight:600;
-    padding:5px 10px;
-    border-radius:6px;
-    flex-shrink:0;
-  }
-  .score-hot{ background:rgba(46,124,246,0.16); color:var(--amber); }
-  .score-warm{ background:rgba(31,166,122,0.16); color:var(--green); }
-  .score-pending{ background:rgba(255,255,255,0.08); color:var(--muted-soft); }
-
-  .ticker-foot{
-    display:flex; align-items:center; justify-content:space-between;
-    margin-top:16px;
-    padding-top:16px;
-    border-top:1px solid rgba(255,255,255,0.08);
-  }
-  .ticker-foot .ttl{ font-family:var(--mono); font-size:11.5px; color:var(--muted-soft); }
-  .ticker-foot .clk{ font-family:var(--mono); font-size:13px; color:var(--amber); font-weight:600; }
-
-  /* ============ SECTION SHELL ============ */
-  section{ padding:96px 0; }
-  @media (max-width:780px){ section{ padding:68px 0; } }
-
-  .sec-head{
-    max-width:680px;
-    margin-bottom:56px;
-  }
-  .sec-head .eyebrow{ color:var(--amber-deep); margin-bottom:14px; }
-  .sec-head h2{
-    font-family:var(--display);
-    font-weight:700;
-    font-size:clamp(28px,3.6vw,40px);
-    letter-spacing:-0.01em;
-    color:var(--ink);
-    line-height:1.15;
-  }
-  .sec-head p{
-    margin-top:14px;
-    font-size:16.5px;
-    color:var(--muted);
-    line-height:1.6;
-    max-width:560px;
-  }
-  .sec-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
-
-  /* ============ PROBLEM SECTION ============ */
-  .problem{ background:var(--mist); }
-  .leak-flow{
-    display:flex;
-    align-items:stretch;
-    gap:0;
-    margin-top:8px;
-  }
-  @media (max-width:900px){
-    .leak-flow{ flex-direction:column; gap:14px; }
-  }
-  .leak-step{
-    flex:1;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:26px 22px;
-    position:relative;
-    transition:box-shadow .2s ease, transform .2s ease;
-  }
-  .leak-step:hover{ box-shadow:0 14px 30px -16px rgba(15,30,51,0.18); transform:translateY(-3px); }
-  .leak-step .num{
-    font-family:var(--mono); font-size:12px; color:var(--muted-soft);
-    margin-bottom:14px; letter-spacing:0.05em;
-  }
-  .leak-step h3{
-    font-family:var(--display); font-size:16.5px; font-weight:700; color:var(--ink);
-    margin-bottom:8px;
-  }
-  .leak-step p{ font-size:14px; color:var(--muted); line-height:1.55; }
-  .leak-step .chip{
-    display:inline-flex; align-items:center; gap:6px;
-    font-family:var(--mono); font-size:11px; font-weight:600;
-    padding:4px 9px; border-radius:5px; margin-top:14px;
-  }
-  .leak-step:nth-child(1) .chip{ background:rgba(31,166,122,0.12); color:var(--green); }
-  .leak-step:nth-child(2) .chip{ background:rgba(46,124,246,0.12); color:var(--amber-deep); }
-  .leak-step:nth-child(3) .chip{ background:rgba(220,38,38,0.10); color:#C23A2A; }
-  .leak-step:nth-child(4) .chip{ background:rgba(15,30,51,0.08); color:var(--slate); }
-
-  .leak-arrow{
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0; width:46px; color:var(--muted-soft);
-  }
-  @media (max-width:900px){
-    .leak-arrow{ width:auto; height:18px; transform:rotate(90deg); margin:0 auto; }
-  }
-
-  .leak-result{
-    margin-top:40px;
-    background:var(--ink);
-    border-radius:14px;
-    padding:28px 32px;
-    display:flex;
-    align-items:center;
-    gap:22px;
-    flex-wrap:wrap;
-  }
-  @media (max-width:560px){
-    .leak-result{ padding:24px; }
-  }
-  .leak-result .ico{
-    width:48px;height:48px;border-radius:10px;
-    background:rgba(46,124,246,0.15);
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-  }
-  .leak-result .txt b{
-    display:block; color:#fff; font-family:var(--display); font-size:19px; font-weight:700;
-  }
-  .leak-result .txt span{ color:var(--muted-soft); font-size:14px; }
-
-  /* ============ HOW IT WORKS ============ */
-  .timeline{
-    margin-top:8px;
-    position:relative;
-  }
-  .timeline-track{
-    position:absolute;
-    left:27px; top:6px; bottom:6px;
-    width:2px;
-    background:var(--line);
-  }
-  @media (max-width:680px){ .timeline-track{ left:23px; } }
-
-  .tl-step{
-    display:flex;
-    gap:24px;
-    padding:0 0 44px;
-    position:relative;
-  }
-  .tl-step:last-child{ padding-bottom:0; }
-  .tl-node{
-    width:56px;height:56px;border-radius:50%;
-    background:#fff;
-    border:2px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-    font-family:var(--display); font-weight:700; font-size:18px;
-    color:var(--slate-soft);
-    position:relative; z-index:2;
-    transition:border-color .25s, color .25s, background .25s;
-  }
-  @media (max-width:680px){ .tl-node{ width:46px;height:46px; font-size:15px; } }
-  .tl-step.in .tl-node{
-    border-color:var(--amber);
-    color:var(--amber-deep);
-    background:#FFF4EC;
-  }
-  .tl-content{
-    flex:1;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:22px 24px;
-    margin-top:2px;
-    display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
-    transition:box-shadow .25s, border-color .25s;
-  }
-  .tl-step.in .tl-content{ box-shadow:0 16px 32px -18px rgba(15,30,51,0.2); border-color:#E9D8C8; }
-  .tl-content h3{
-    font-family:var(--display); font-size:17.5px; font-weight:700; color:var(--ink); margin-bottom:5px;
-  }
-  .tl-content p{ font-size:14.5px; color:var(--muted); }
-  .tl-tag{
-    font-family:var(--mono); font-size:11.5px; font-weight:600;
-    padding:6px 12px; border-radius:6px;
-    white-space:nowrap;
-    flex-shrink:0;
-  }
-  .tl-tag.t1{ background:rgba(15,30,51,0.07); color:var(--slate); }
-  .tl-tag.t2{ background:rgba(46,124,246,0.13); color:var(--amber-deep); }
-  .tl-tag.t3{ background:rgba(31,166,122,0.13); color:var(--green); }
-
-  /* ============ FEATURES ============ */
-  .features{ background:var(--mist); }
-  .feat-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:20px;
-  }
-  @media (max-width:980px){ .feat-grid{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:640px){ .feat-grid{ grid-template-columns:1fr; } }
-
-  .feat-card{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:28px 26px;
-    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-    position:relative;
-    overflow:hidden;
-  }
-  .feat-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 22px 40px -22px rgba(15,30,51,0.22);
-    border-color:#D8DEE7;
-  }
-  .feat-card .ico-box{
-    width:46px;height:46px;border-radius:10px;
-    background:var(--ink);
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:18px;
-  }
-  .feat-card.accent .ico-box{ background:var(--amber); }
-  .feat-card h3{
-    font-family:var(--display); font-size:17px; font-weight:700; color:var(--ink); margin-bottom:8px;
-  }
-  .feat-card p{ font-size:14.5px; color:var(--muted); line-height:1.6; }
-  .feat-card .tag-line{
-    margin-top:16px;
-    font-family:var(--mono); font-size:11.5px; color:var(--muted-soft);
-    display:flex; align-items:center; gap:6px;
-  }
-
-  /* ============ FINAL CTA ============ */
-  .final-cta{
-    background:var(--ink);
-    position:relative;
-    overflow:hidden;
-    padding:88px 0;
-  }
-  .final-cta::before{
-    content:'';
-    position:absolute; left:50%; top:0; transform:translateX(-50%);
-    width:900px; height:300px;
-    background:radial-gradient(ellipse at top, rgba(46,124,246,0.22), transparent 70%);
-    pointer-events:none;
-  }
-  .final-cta-inner{
-    position:relative; z-index:2;
-    text-align:center;
-    max-width:680px;
-    margin:0 auto;
-  }
-  .final-cta h2{
-    font-family:var(--display); font-weight:700; color:#fff;
-    font-size:clamp(28px,4vw,42px); line-height:1.15; letter-spacing:-0.01em;
-  }
-  .final-cta p{
-    margin-top:16px; font-size:17px; color:var(--muted-soft); line-height:1.6;
-  }
-  .final-cta .hero-actions{ justify-content:center; margin-top:30px; }
-
-  /* ============ FOOTER ============ */
-  footer{ background:#0C1729; padding:56px 0 32px; }
-  .foot-top{
-    display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap;
-    padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,0.08);
-  }
-  .foot-brand{ max-width:280px; }
-  .foot-brand .brand{ color:#fff; margin-bottom:12px; }
-  .foot-brand p{ font-size:13.5px; color:var(--muted-soft); line-height:1.6; }
-  .foot-cols{ display:flex; gap:56px; flex-wrap:wrap; }
-  .foot-col h4{
-    font-family:var(--mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--muted-soft); margin-bottom:14px; font-weight:600;
-  }
-  .foot-col a{
-    display:block; font-size:14px; color:#C3CDDB; margin-bottom:10px; transition:color .15s;
-  }
-  .foot-col a:hover{ color:#fff; }
-  .foot-bottom{
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
-    padding-top:28px;
-    font-size:13px; color:var(--muted-soft);
-  }
-  .foot-bottom .dot-sep{ color:var(--slate-soft); margin:0 8px; }
-
-  /* ============ DEMO REQUEST MODAL ============ */
-  .modal-overlay{
-    position:fixed; inset:0; z-index:200;
-    background:rgba(15,30,51,0.6);
-    backdrop-filter:blur(4px);
-    display:none;
-    align-items:center; justify-content:center;
-    padding:20px;
-    opacity:0;
-    transition:opacity .2s ease;
-  }
-  .modal-overlay.open{ display:flex; opacity:1; }
-  .modal-card{
-    background:#fff;
-    border-radius:16px;
-    max-width:560px;
-    width:100%;
-    max-height:90vh;
-    overflow-y:auto;
-    padding:36px;
-    position:relative;
-    transform:translateY(10px) scale(0.98);
-    transition:transform .25s cubic-bezier(.2,.7,.3,1);
-    box-shadow:0 40px 80px -20px rgba(0,0,0,0.3);
-  }
-  .modal-overlay.open .modal-card{ transform:translateY(0) scale(1); }
-  .modal-close{
-    position:absolute; top:20px; right:20px;
-    width:32px; height:32px; border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-    color:var(--muted); transition:background .15s;
-  }
-  .modal-close:hover{ background:var(--mist); }
-  .modal-head{ margin-bottom:24px; padding-right:36px; }
-  .modal-head .eyebrow{ color:var(--amber-deep); margin-bottom:10px; }
-  .modal-head h3{
-    font-family:var(--display); font-weight:700; font-size:23px; color:var(--ink); line-height:1.2;
-  }
-  .modal-head p{ margin-top:8px; font-size:14.5px; color:var(--muted); line-height:1.55; }
-
-  .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .form-grid .full{ grid-column:1 / -1; }
-  @media (max-width:520px){ .form-grid{ grid-template-columns:1fr; } }
-
-  .field label{
-    display:block; font-size:12.5px; font-weight:600; color:var(--slate);
-    margin-bottom:6px;
-  }
-  .field input, .field select, .field textarea{
-    width:100%;
-    font-family:var(--body); font-size:14.5px;
-    padding:11px 13px;
-    border:1.5px solid var(--line);
-    border-radius:8px;
-    background:#fff;
-    color:var(--ink);
-    transition:border-color .15s;
-  }
-  .field textarea{ resize:vertical; min-height:64px; font-family:var(--body); }
-  .field input:focus, .field select:focus, .field textarea:focus{
-    outline:none; border-color:var(--amber);
-  }
-  .field-note{ font-size:12px; color:var(--muted-soft); margin-top:4px; }
-
-  .form-submit{
-    width:100%; margin-top:22px;
-    padding:14px; font-size:15.5px;
-  }
-  .form-foot-note{
-    margin-top:14px; text-align:center; font-size:12.5px; color:var(--muted-soft);
-  }
-
-  .form-state{
-    display:none; text-align:center; padding:20px 0;
-  }
-  .form-state.active{ display:block; }
-  .form-state .ico{
-    width:52px; height:52px; border-radius:50%;
-    background:var(--green); margin:0 auto 18px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .form-state h3{ font-family:var(--display); font-size:20px; color:var(--ink); margin-bottom:8px; }
-  .form-state p{ font-size:14.5px; color:var(--muted); line-height:1.6; max-width:380px; margin:0 auto; }
-  .form-state.error .ico{ background:#C23A2A; }
-</style>
+<link rel="stylesheet" href="assets/styles.css">
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
 <!-- ============ NAV ============ -->
 <nav class="nav">
   <div class="wrap nav-inner">
-    <div class="brand">
-      <span class="brand-mark" style="overflow:hidden; padding:0;">
-        <img src="logo.png" alt="" style="width:30px; height:30px; object-fit:cover; object-position:25% 20%; display:block;">
-      </span>
-      Lead<wbr>Intel CRM
-    </div>
-    <div class="nav-links" id="navLinks">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
+      LeadIntel CRM
+    </a>
+    <div class="nav-links">
       <a href="#problem">Problem</a>
       <a href="#how-it-works">How it Works</a>
       <a href="#features">Features</a>
+      <a href="pricing.html">Pricing</a>
     </div>
     <div class="nav-cta">
-      <a class="ghost-link" href="#" id="navBookDemo">Book a Demo</a>
-      <a class="btn btn-primary btn-sm" href="#" id="navGetStarted">Get Started Free</a>
+      <a class="ghost-link js-book-demo" href="#">Book a Demo</a>
+      <a class="btn btn-primary btn-sm js-get-started" href="#get-started">Get Started Free</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#problem">Problem</a>
+  <a href="#how-it-works">How it Works</a>
+  <a href="#features">Features</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a class="btn btn-primary js-get-started" href="#get-started">Get Started Free</a>
+</div>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="hero-glow"></div>
+  <div class="hero-glow two"></div>
   <div class="wrap hero-inner">
     <div>
-      <img src="logo.png" alt="LeadIntel CRM" style="height:90px; width:auto; margin-bottom:24px; display:block;">
-      <div class="hero-eyebrow eyebrow"><span class="dot"></span> AI LEAD INTELLIGENCE FOR CONTRACTORS</div>
-      <h1>Stop losing jobs to <em>slow follow-up.</em></h1>
-      <p class="hero-sub">LeadIntel CRM scores, ranks, and routes every inbound lead the second it lands — so you call the right customer first, not just the first customer who called.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#" id="heroGetStarted">Get Started Free</a>
-        <a class="btn btn-outline" style="border-color:rgba(255,255,255,0.25); color:#fff;" href="#" id="heroBookDemo">Book a Demo</a>
+      <img class="hero-logo enter" src="assets/logo.png" alt="LeadIntel CRM" style="--enter-delay:0s;">
+      <div class="hero-eyebrow eyebrow enter" style="--enter-delay:.08s;"><span class="dot"></span> AI LEAD INTELLIGENCE FOR CONTRACTORS</div>
+      <h1 class="enter" style="--enter-delay:.16s;">Stop losing jobs to <em>slow follow-up.</em></h1>
+      <p class="hero-sub enter" style="--enter-delay:.26s;">LeadIntel CRM scores, ranks, and routes every inbound lead the second it lands — so you call the right customer first, not just the first customer who called.</p>
+      <div class="hero-actions enter" style="--enter-delay:.36s;">
+        <a class="btn btn-primary btn-lg js-get-started" href="#get-started">Get Started Free</a>
+        <a class="btn btn-outline-light js-book-demo" href="#">Book a Demo</a>
       </div>
-      <div class="hero-note">No commitment to book a call &nbsp;·&nbsp; We'll walk through exactly how it'd work for your business, live</div>
+      <div class="hero-note enter" style="--enter-delay:.44s;">No commitment to book a call &nbsp;·&nbsp; We'll walk through exactly how it'd work for your business, live</div>
 
-      <div class="hero-stats">
+      <div class="hero-stats enter" style="--enter-delay:.52s;">
         <div class="hero-stat"><b>&lt; 8 sec</b><span>Avg. lead-to-alert time</span></div>
         <div class="hero-stat"><b>3.4×</b><span>More booked jobs / lead</span></div>
         <div class="hero-stat"><b>24/7</b><span>Intake, even off-hours</span></div>
@@ -715,7 +70,7 @@
     </div>
 
     <!-- Signature element: live lead ticker -->
-    <div class="ticker-card reveal" id="tickerCard">
+    <div class="ticker-card enter" style="--enter-delay:.3s;">
       <div class="ticker-head">
         <span class="label">Live Lead Queue</span>
         <span class="live"><span class="ld"></span> Streaming</span>
@@ -756,54 +111,54 @@
   </div>
 </header>
 
-<!-- ============ PROBLEM SECTION ============ -->
-<section class="problem" id="problem">
+<!-- ============ PROBLEM ============ -->
+<section class="section-mist" id="problem">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head" data-reveal>
       <div class="eyebrow">THE COST OF DELAY</div>
       <h2>The Leaky Lead Problem</h2>
       <p>Every contractor has this leak. It's invisible on a spreadsheet and brutal on a P&amp;L — a good lead doesn't get rejected, it just gets ignored until it's gone.</p>
     </div>
 
-    <div class="leak-flow reveal">
-      <div class="leak-step">
+    <div class="leak-flow" data-reveal-stagger>
+      <div class="leak-step" data-reveal>
         <div class="num">STAGE 01</div>
         <h3>Lead comes in</h3>
         <p>A homeowner fills out a form or texts your number at 9:47pm on a Tuesday.</p>
-        <span class="chip">● FRESH</span>
+        <span class="chip chip-fresh">● FRESH</span>
       </div>
-      <div class="leak-arrow">
+      <div class="leak-arrow" data-reveal>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="leak-step">
+      <div class="leak-step" data-reveal>
         <div class="num">STAGE 02</div>
         <h3>Contractor gets busy</h3>
         <p>You're on a roof, mid-install, or asleep. The notification sits in a buried inbox.</p>
-        <span class="chip">● DELAYED</span>
+        <span class="chip chip-delayed">● DELAYED</span>
       </div>
-      <div class="leak-arrow">
+      <div class="leak-arrow" data-reveal>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="leak-step">
+      <div class="leak-step" data-reveal>
         <div class="num">STAGE 03</div>
         <h3>Lead sits</h3>
         <p>Hours pass. The homeowner has already called two other contractors who answered.</p>
-        <span class="chip">● GOING COLD</span>
+        <span class="chip chip-cold">● GOING COLD</span>
       </div>
-      <div class="leak-arrow">
+      <div class="leak-arrow" data-reveal>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12H20M20 12L14 6M20 12L14 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="leak-step">
+      <div class="leak-step" data-reveal>
         <div class="num">STAGE 04</div>
         <h3>Money gets lost</h3>
         <p>Job booked elsewhere. You never even knew it was a $14,000 opportunity.</p>
-        <span class="chip">● LOST</span>
+        <span class="chip chip-lost">● LOST</span>
       </div>
     </div>
 
-    <div class="leak-result reveal">
+    <div class="leak-result" data-reveal>
       <div class="ico">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 21H22L12 2Z" stroke="#2E7CF6" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9V14" stroke="#2E7CF6" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17.5" r="0.9" fill="#2E7CF6"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 21H22L12 2Z" stroke="#5B9DFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9V14" stroke="#5B9DFF" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17.5" r="0.9" fill="#5B9DFF"/></svg>
       </div>
       <div class="txt">
         <b>The average contractor loses 18–27% of inbound leads to response delay alone.</b>
@@ -816,16 +171,16 @@
 <!-- ============ HOW IT WORKS ============ -->
 <section id="how-it-works">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head" data-reveal>
       <div class="eyebrow">HOW IT WORKS</div>
       <h2>Lead to Confirmed in Seconds</h2>
       <p>One continuous pipeline — from the moment a customer reaches out to the moment they have a confirmed appointment, with no manual handoff in between.</p>
     </div>
 
-    <div class="timeline reveal">
+    <div class="timeline">
       <div class="timeline-track"></div>
 
-      <div class="tl-step in">
+      <div class="tl-step" data-reveal>
         <div class="tl-node">1</div>
         <div class="tl-content">
           <div>
@@ -836,7 +191,7 @@
         </div>
       </div>
 
-      <div class="tl-step in">
+      <div class="tl-step" data-reveal>
         <div class="tl-node">2</div>
         <div class="tl-content">
           <div>
@@ -847,7 +202,7 @@
         </div>
       </div>
 
-      <div class="tl-step in">
+      <div class="tl-step" data-reveal>
         <div class="tl-node">3</div>
         <div class="tl-content">
           <div>
@@ -858,7 +213,7 @@
         </div>
       </div>
 
-      <div class="tl-step in">
+      <div class="tl-step" data-reveal>
         <div class="tl-node">4</div>
         <div class="tl-content">
           <div>
@@ -869,7 +224,7 @@
         </div>
       </div>
 
-      <div class="tl-step in">
+      <div class="tl-step" data-reveal>
         <div class="tl-node">5</div>
         <div class="tl-content">
           <div>
@@ -884,17 +239,17 @@
 </section>
 
 <!-- ============ FEATURES ============ -->
-<section class="features" id="features">
+<section class="section-mist" id="features">
   <div class="wrap">
-    <div class="sec-head reveal">
+    <div class="sec-head" data-reveal>
       <div class="eyebrow">CORE PLATFORM</div>
       <h2>Six pillars. One pipeline.</h2>
       <p>Everything works together — built specifically for the speed and chaos of contractor scheduling.</p>
     </div>
 
-    <div class="feat-grid reveal">
+    <div class="feat-grid" data-reveal-stagger>
 
-      <div class="feat-card accent">
+      <div class="feat-card accent" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L15 9L22 9.5L17 14.5L18.5 22L12 18L5.5 22L7 14.5L2 9.5L9 9L12 2Z" stroke="white" stroke-width="1.4" stroke-linejoin="round"/></svg>
         </div>
@@ -903,7 +258,7 @@
         <div class="tag-line">→ filters noise from real revenue</div>
       </div>
 
-      <div class="feat-card">
+      <div class="feat-card" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 18H8M4 12H14M4 6H20" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
         </div>
@@ -912,7 +267,7 @@
         <div class="tag-line">→ call the $14k job before the $400 one</div>
       </div>
 
-      <div class="feat-card">
+      <div class="feat-card" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="1.6"/><path d="M3 8H21" stroke="white" stroke-width="1.6"/><circle cx="7" cy="13" r="0.8" fill="white"/></svg>
         </div>
@@ -921,7 +276,7 @@
         <div class="tag-line">→ never miss an after-hours lead again</div>
       </div>
 
-      <div class="feat-card accent">
+      <div class="feat-card accent" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2C8 2 6 5 6 9V13L4 17H20L18 13V9C18 5 16 2 12 2Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 20A3 3 0 0015 20" stroke="white" stroke-width="1.6"/></svg>
         </div>
@@ -930,7 +285,7 @@
         <div class="tag-line">→ average alert time: under 8 seconds</div>
       </div>
 
-      <div class="feat-card">
+      <div class="feat-card" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="7" height="16" rx="1.4" stroke="white" stroke-width="1.6"/><rect x="14" y="4" width="7" height="9" rx="1.4" stroke="white" stroke-width="1.6"/></svg>
         </div>
@@ -939,7 +294,7 @@
         <div class="tag-line">→ one screen, every job, every status</div>
       </div>
 
-      <div class="feat-card">
+      <div class="feat-card" data-reveal>
         <div class="ico-box">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -954,13 +309,13 @@
 
 <!-- ============ FINAL CTA ============ -->
 <section class="final-cta" id="demo">
-  <div class="wrap final-cta-inner">
-    <div class="eyebrow" style="color:var(--amber);">READY WHEN YOU ARE</div>
-    <h2 style="margin-top:14px;">Your next lead is coming in right now.</h2>
+  <div class="wrap final-cta-inner" data-reveal>
+    <div class="eyebrow">READY WHEN YOU ARE</div>
+    <h2>Your next lead is coming in right now.</h2>
     <p>Will it sit in an inbox, or get scored, alerted, and confirmed in seconds? Set up takes less time than your next coffee.</p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="#" id="finalGetStarted">Get Started Free</a>
-      <a class="btn btn-outline" style="border-color:rgba(255,255,255,0.25); color:#fff;" href="#" id="finalBookDemo">Book a Demo</a>
+      <a class="btn btn-primary btn-lg js-get-started" href="#get-started">Get Started Free</a>
+      <a class="btn btn-outline-light js-book-demo" href="#">Book a Demo</a>
     </div>
     <div class="hero-note" style="margin-top:18px;">No commitment to book a call &nbsp;·&nbsp; We'll walk through exactly how it'd work for your business, live</div>
   </div>
@@ -971,7 +326,10 @@
   <div class="wrap">
     <div class="foot-top">
       <div class="foot-brand">
-        <img src="logo.png" alt="LeadIntel CRM" style="height:70px; width:auto; margin-bottom:12px; display:block;">
+        <a href="index.html" class="brand">
+          <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
+          LeadIntel CRM
+        </a>
         <p>AI-powered lead intelligence built for contractors who can't afford to lose a job to lag.</p>
       </div>
       <div class="foot-cols">
@@ -1000,8 +358,8 @@
   </div>
 </footer>
 
-<!-- ============ DEMO REQUEST MODAL ============ -->
-<div class="modal-overlay" id="demoModal">
+<!-- ============ LEAD FORM MODAL ============ -->
+<div class="modal-overlay" id="demoModal" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
   <div class="modal-card">
     <button class="modal-close" id="modalClose" aria-label="Close">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -1010,7 +368,7 @@
     <div id="formState">
       <div class="modal-head">
         <div class="eyebrow">TELL US ABOUT YOUR BUSINESS</div>
-        <h3>Let's build something for you.</h3>
+        <h3 id="demoModalTitle">Let's build something for you.</h3>
         <p>Answer a few quick questions and we'll put together a working mockup tailored to your trade and your lead flow — no commitment, no credit card.</p>
       </div>
 
@@ -1018,19 +376,19 @@
         <div class="form-grid">
           <div class="field full">
             <label for="f-name">Full name</label>
-            <input type="text" id="f-name" name="name" required>
+            <input type="text" id="f-name" name="name" autocomplete="name" required>
           </div>
           <div class="field">
             <label for="f-email">Email</label>
-            <input type="email" id="f-email" name="email" required>
+            <input type="email" id="f-email" name="email" autocomplete="email" required>
           </div>
           <div class="field">
             <label for="f-phone">Phone</label>
-            <input type="tel" id="f-phone" name="phone">
+            <input type="tel" id="f-phone" name="phone" autocomplete="tel">
           </div>
           <div class="field full">
             <label for="f-business">Business name</label>
-            <input type="text" id="f-business" name="business_name" required>
+            <input type="text" id="f-business" name="business_name" autocomplete="organization" required>
           </div>
           <div class="field">
             <label for="f-trade">Trade / industry</label>
@@ -1073,115 +431,6 @@
   </div>
 </div>
 
-<script>
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.15 });
-  reveals.forEach(el=>io.observe(el));
-  // ticker card starts visible since it's above the fold (hero)
-  document.getElementById('tickerCard').classList.add('in');
-
-  // Hero ticker: simulate live scoring + countdown
-  const scoreA = document.getElementById('scoreA');
-  const clk = document.getElementById('clk');
-  let seconds = 4;
-
-  setTimeout(()=>{
-    scoreA.textContent = 'HOT · 96';
-    scoreA.classList.remove('score-hot');
-    scoreA.classList.add('score-hot');
-  }, 1400);
-
-  setInterval(()=>{
-    seconds = seconds <= 0 ? 12 : seconds - 1;
-    clk.textContent = '00:' + String(seconds).padStart(2,'0');
-  }, 1000);
-
-  // Mobile nav links: hide on very small screens to avoid crowding (CSS handles via wrap, but ensure no overflow)
-
-  // ============ DEMO MODAL + FORM SUBMISSION ============
-  const WEBHOOK_URL = "https://hook.us2.make.com/g3tym115ddjvvxjman4ahfihmaq6da1i";
-  const CALENDLY_URL = "https://calendly.com/juneflows26/30min";
-
-  const demoModal = document.getElementById('demoModal');
-  const modalClose = document.getElementById('modalClose');
-  const formState = document.getElementById('formState');
-  const successState = document.getElementById('successState');
-  const errorState = document.getElementById('errorState');
-  const demoForm = document.getElementById('demoForm');
-  const formSubmitBtn = document.getElementById('formSubmitBtn');
-
-  function openModal(){
-    demoModal.classList.add('open');
-    formState.style.display = 'block';
-    successState.classList.remove('active');
-    errorState.classList.remove('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeModal(){
-    demoModal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  // Wire up all "Get Started Free" buttons to open the modal
-  ['navGetStarted', 'heroGetStarted', 'finalGetStarted'].forEach(id => {
-    const btn = document.getElementById(id);
-    if(btn) btn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-  });
-
-  // Wire up all "Book a Demo" buttons to open Calendly in a new tab
-  ['navBookDemo', 'heroBookDemo', 'finalBookDemo'].forEach(id => {
-    const btn = document.getElementById(id);
-    if(btn) btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.open(CALENDLY_URL, '_blank');
-    });
-  });
-
-  modalClose.addEventListener('click', closeModal);
-  demoModal.addEventListener('click', (e) => { if(e.target === demoModal) closeModal(); });
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && demoModal.classList.contains('open')) closeModal(); });
-
-  demoForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    formSubmitBtn.disabled = true;
-    formSubmitBtn.textContent = 'Sending…';
-
-    const payload = {
-      name: document.getElementById('f-name').value.trim(),
-      email: document.getElementById('f-email').value.trim(),
-      phone: document.getElementById('f-phone').value.trim(),
-      business_name: document.getElementById('f-business').value.trim(),
-      trade: document.getElementById('f-trade').value.trim(),
-      lead_volume: document.getElementById('f-volume').value.trim(),
-      current_process: document.getElementById('f-process').value.trim(),
-      pain_point: document.getElementById('f-pain').value.trim()
-    };
-
-    fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-      .then(res => {
-        if(!res.ok) throw new Error('Request failed');
-        formState.style.display = 'none';
-        successState.classList.add('active');
-      })
-      .catch(() => {
-        formState.style.display = 'none';
-        errorState.classList.add('active');
-      })
-      .finally(() => {
-        formSubmitBtn.disabled = false;
-        formSubmitBtn.textContent = 'Send my details';
-      });
-  });
-</script>
-
+<script src="assets/site.js"></script>
 </body>
 </html>
