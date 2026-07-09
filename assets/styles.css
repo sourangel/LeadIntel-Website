@@ -803,6 +803,50 @@ section{padding:104px 0;}
   font-size:14px;color:var(--muted-soft);line-height:1.7;
 }
 
+/* SMS opt-in page */
+.optin-card{
+  max-width:620px;margin:-64px auto 0;position:relative;z-index:5;
+  background:#fff;border:1px solid var(--line);border-radius:20px;
+  padding:44px 40px;box-shadow:var(--shadow-card-hover);
+}
+@media (max-width:560px){ .optin-card{padding:32px 22px;} }
+.optin-intro{font-size:14.5px;color:var(--slate);line-height:1.7;margin-bottom:16px;}
+.optin-intro b{color:var(--ink);}
+.optin-card form{margin-top:26px;}
+
+.consent-box{
+  display:flex;align-items:flex-start;gap:13px;
+  margin-top:22px;padding:18px 20px;
+  background:#EDF4FF;border:1.5px solid #CBDCF9;border-radius:12px;
+  cursor:pointer;
+  transition:border-color .2s, box-shadow .2s;
+}
+.consent-box:hover{border-color:var(--blue);}
+.consent-box:has(input:checked){border-color:var(--blue);box-shadow:0 0 0 3px rgba(46,124,246,0.14);}
+.consent-box input{
+  appearance:none;-webkit-appearance:none;
+  width:20px;height:20px;flex-shrink:0;margin-top:2px;
+  border:1.5px solid var(--blue-deep);border-radius:6px;background:#fff;
+  cursor:pointer;position:relative;
+  transition:background .2s, border-color .2s;
+}
+.consent-box input:checked{
+  background:var(--blue);border-color:var(--blue);
+}
+.consent-box input:checked::after{
+  content:'';position:absolute;left:5.5px;top:2px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);
+}
+.consent-box input:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.consent-box span{font-size:14px;color:var(--slate);line-height:1.6;}
+
+.optin-disclosure{
+  margin-top:18px;font-size:12.5px;color:var(--muted-soft);line-height:1.7;text-align:center;
+}
+.optin-disclosure b{color:var(--muted);}
+.optin-disclosure a{color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px;transition:color .2s;}
+.optin-disclosure a:hover{color:var(--blue);}
+
 .faq{max-width:700px;margin:0 auto;}
 .faq h2{
   font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,30px);
