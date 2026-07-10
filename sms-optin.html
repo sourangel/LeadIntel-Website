@@ -86,12 +86,12 @@
 
           <label class="consent-box" for="o-consent">
             <input type="checkbox" id="o-consent" name="sms_consent">
-            <span>I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. This is optional. Reply STOP to opt out, HELP for help.</span>
+            <span>I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. Consent is optional and not required to use LeadIntel CRM. Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out and HELP for help.</span>
           </label>
 
           <button type="submit" class="btn btn-primary form-submit" id="optinSubmitBtn">Submit</button>
 
-          <p class="optin-disclosure">Message frequency may vary. Message and data rates may apply. Reply <b>STOP</b> to opt out at any time, or <b>HELP</b> for help. Consent to receive texts is not a condition of signing up for or using LeadIntel CRM. See our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+          <p class="optin-disclosure">Consent to receive texts is not a condition of signing up for or using LeadIntel CRM. See our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</p>
         </form>
       </div>
 
@@ -171,7 +171,7 @@
       phone: document.getElementById('o-phone').value.trim(),
       sms_consent: consented ? 'yes' : 'no',
       consent_text: consented
-        ? 'I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. This is optional. Reply STOP to opt out, HELP for help.'
+        ? 'I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. Consent is optional and not required to use LeadIntel CRM. Message frequency varies. Msg & data rates may apply. Reply STOP to opt out and HELP for help.'
         : '',
       consent_timestamp: new Date().toISOString(),
       source: 'sms-optin-page'
