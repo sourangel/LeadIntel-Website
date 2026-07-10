@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMS Text Alerts Opt-In — LeadIntel CRM</title>
+<meta name="description" content="Opt in to receive SMS text alerts from LeadIntel CRM — lead alerts and account notifications for your LeadIntel account. Optional, reply STOP to opt out.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
+      LeadIntel CRM
+    </a>
+    <div class="nav-links">
+      <a href="index.html#problem">Problem</a>
+      <a href="index.html#how-it-works">How it Works</a>
+      <a href="index.html#features">Features</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a class="ghost-link js-book-demo" href="#">Book a Demo</a>
+      <a class="btn btn-primary btn-sm" href="index.html#get-started">Get Started Free</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#problem">Problem</a>
+  <a href="index.html#how-it-works">How it Works</a>
+  <a href="index.html#features">Features</a>
+  <a href="pricing.html">Pricing</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a class="btn btn-primary" href="index.html#get-started">Get Started Free</a>
+</div>
+
+<!-- ============ PAGE HERO ============ -->
+<header class="page-hero center overlap">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <div class="eyebrow enter" style="--enter-delay:0s;"><span class="dot"></span> SMS TEXT ALERTS</div>
+    <h1 class="enter" style="--enter-delay:.1s;">Get LeadIntel alerts by text.</h1>
+    <p class="enter" style="--enter-delay:.2s;">Opt in to receive SMS notifications from LeadIntel CRM — a text the moment a new lead is scored and ready for follow-up, plus account notifications. Optional, and only about your account.</p>
+  </div>
+</header>
+
+<!-- ============ OPT-IN CARD ============ -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <div class="optin-card enter" style="--enter-delay:.3s;">
+
+      <div id="optinFormState">
+        <p class="optin-intro"><b>LeadIntel CRM</b> can send you SMS/text messages about your account: lead alerts (for example, a text when a new lead is scored and ready for follow-up) and related account notifications. These are operational account notifications only — never marketing or promotional messages.</p>
+        <p class="optin-intro">Agreeing to text messages is <b>optional</b> and is <b>not required</b> to sign up for or use LeadIntel CRM. It's a separate choice you can make — or skip — at any time.</p>
+
+        <form id="optinForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="o-name">Full name</label>
+              <input type="text" id="o-name" name="name" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="o-email">Email</label>
+              <input type="email" id="o-email" name="email" autocomplete="email" required>
+            </div>
+            <div class="field full">
+              <label for="o-phone">Mobile phone number</label>
+              <input type="tel" id="o-phone" name="phone" autocomplete="tel" required>
+            </div>
+          </div>
+
+          <label class="consent-box" for="o-consent">
+            <input type="checkbox" id="o-consent" name="sms_consent">
+            <span>I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. This is optional. Reply STOP to opt out, HELP for help.</span>
+          </label>
+
+          <button type="submit" class="btn btn-primary form-submit" id="optinSubmitBtn">Submit</button>
+
+          <p class="optin-disclosure">Message frequency may vary. Message and data rates may apply. Reply <b>STOP</b> to opt out at any time, or <b>HELP</b> for help. Consent to receive texts is not a condition of signing up for or using LeadIntel CRM. See our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>.</p>
+        </form>
+      </div>
+
+      <div class="form-state" id="optinSuccess">
+        <div class="ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>You're all set.</h3>
+        <p id="optinSuccessMsg">Thanks — we've recorded your submission. Reply STOP to any message to opt out, or HELP for help.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="index.html" class="brand">
+          <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
+          LeadIntel CRM
+        </a>
+        <p>AI-powered lead intelligence built for contractors who can't afford to lose a job to lag.</p>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Product</h4>
+          <a href="index.html#how-it-works">How it Works</a>
+          <a href="index.html#features">Features</a>
+          <a href="pricing.html">Pricing</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h4>Legal</h4>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
+      <span>Built for contractors from someone who's worked on the job site, not just behind a desk.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // SMS consent submissions webhook (separate from the lead-form pipeline).
+  // Paste the dedicated Make.com webhook URL here once it exists; while this
+  // is empty the form only shows the confirmation and sends nothing.
+  var CONSENT_WEBHOOK_URL = 'https://hook.us2.make.com/k211htai8n4rf3tojwjpipydge8lwtwc';
+
+  var form = document.getElementById('optinForm');
+  var formState = document.getElementById('optinFormState');
+  var successState = document.getElementById('optinSuccess');
+  var successMsg = document.getElementById('optinSuccessMsg');
+  var submitBtn = document.getElementById('optinSubmitBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    var consented = document.getElementById('o-consent').checked;
+    var payload = {
+      name: document.getElementById('o-name').value.trim(),
+      email: document.getElementById('o-email').value.trim(),
+      phone: document.getElementById('o-phone').value.trim(),
+      sms_consent: consented ? 'yes' : 'no',
+      consent_text: consented
+        ? 'I agree to receive SMS/text account notifications from LeadIntel CRM about lead alerts and related account activity. This is optional. Reply STOP to opt out, HELP for help.'
+        : '',
+      consent_timestamp: new Date().toISOString(),
+      source: 'sms-optin-page'
+    };
+
+    var showSuccess = function () {
+      formState.style.display = 'none';
+      successState.classList.add('active');
+      successMsg.textContent = consented
+        ? "Thanks — you're opted in to LeadIntel CRM text alerts. Message frequency may vary and message/data rates may apply. Reply STOP to any message to opt out, or HELP for help."
+        : "Thanks — we've saved your details. You have not opted in to text messages, so we won't send you any.";
+    };
+
+    if (!CONSENT_WEBHOOK_URL) {
+      showSuccess();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    fetch(CONSENT_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Request failed');
+        showSuccess();
+      })
+      .catch(function () {
+        submitBtn.textContent = 'Something went wrong — try again';
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        if (successState.classList.contains('active')) submitBtn.textContent = 'Submit';
+      });
+  });
+})();
+</script>
+</body>
+</html>
