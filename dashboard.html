@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lead Dashboard — LeadIntel CRM</title>
+<meta name="description" content="Your live lead queue, scored and prioritized.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+/* ---------- Dashboard-only styles (design tokens from styles.css) ---------- */
+[hidden]{display:none !important;}
+.dash-hero{background:var(--ink);position:relative;overflow:hidden;padding:56px 0 120px;}
+.dash-hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 85% 70% at 50% 0%, black 30%, transparent 80%);
+  mask-image:radial-gradient(ellipse 85% 70% at 50% 0%, black 30%, transparent 80%);
+  pointer-events:none;
+}
+.dash-hero .wrap{position:relative;z-index:2;}
+.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.dash-head h1{
+  font-family:var(--display);font-weight:700;color:#fff;
+  font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.018em;line-height:1.1;
+}
+.dash-head .who{margin-top:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted-soft);word-break:break-all;}
+.dash-actions{display:flex;gap:12px;align-items:center;}
+
+.dash-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  max-width:none;margin:-72px auto 0;position:relative;z-index:5;
+}
+@media (max-width:780px){ .dash-stats{grid-template-columns:repeat(2,1fr);} }
+.dash-stat{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+  box-shadow:var(--shadow-card);
+}
+.dash-stat b{display:block;font-family:var(--display);font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
+.dash-stat span{font-family:var(--mono);font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted-soft);}
+.dash-stat.hot b{color:var(--red);}
+.dash-stat.warm b{color:var(--blue-deep);}
+.dash-stat.value b{color:var(--green);}
+
+.dash-section{padding:56px 0 96px;}
+.dash-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;}
+.dash-toolbar .ttl{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-soft);}
+.dash-filter{display:flex;gap:8px;flex-wrap:wrap;}
+.dash-filter button{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
+  padding:8px 14px;border-radius:100px;border:1.5px solid var(--line);color:var(--muted);
+  transition:border-color .2s, color .2s, background .2s;
+}
+.dash-filter button:hover{border-color:var(--slate-soft);color:var(--ink);}
+.dash-filter button.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+
+.lead-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:22px 24px;margin-bottom:14px;
+  transition:box-shadow .3s var(--ease), border-color .3s, transform .3s var(--ease);
+}
+.lead-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px);}
+.lead-card.is-hot{border-left:3px solid var(--red);}
+.lead-card.is-warm{border-left:3px solid var(--blue);}
+.lead-card.is-cold{border-left:3px solid var(--line);}
+.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+.lead-top h3{font-family:var(--display);font-size:17.5px;font-weight:700;color:var(--ink);}
+.lead-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pri-badge{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.07em;
+  padding:5px 11px;border-radius:100px;
+}
+.pri-hot{background:rgba(214,69,69,0.12);color:var(--red);}
+.pri-warm{background:rgba(46,124,246,0.13);color:var(--blue-deep);}
+.pri-cold{background:rgba(11,15,23,0.07);color:var(--slate);}
+.score-badge{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  padding:5px 11px;border-radius:7px;background:var(--mist);color:var(--slate);
+  border:1px solid var(--line-soft);
+}
+.status-chip{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
+  padding:5px 11px;border-radius:7px;background:rgba(34,176,133,0.11);color:var(--green);
+}
+.lead-meta{
+  display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;
+  font-size:13.5px;color:var(--muted);
+}
+.lead-meta a{color:var(--blue-deep);font-weight:600;}
+.lead-meta a:hover{text-decoration:underline;text-underline-offset:3px;}
+.lead-meta .ev{font-weight:700;color:var(--ink);}
+.lead-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft);}
+.lead-body .row{display:flex;gap:10px;margin-bottom:8px;font-size:14px;line-height:1.6;}
+.lead-body .row:last-child{margin-bottom:0;}
+.lead-body .k{
+  flex-shrink:0;width:118px;font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:0.05em;text-transform:uppercase;color:var(--muted-soft);padding-top:3px;
+}
+.lead-body .v{color:var(--slate);}
+.lead-body .v.action{font-weight:600;color:var(--blue-deep);}
+@media (max-width:560px){
+  .lead-card{padding:18px;}
+  .lead-body .row{flex-direction:column;gap:2px;}
+  .lead-body .k{width:auto;}
+  .lead-meta{gap:10px 18px;}
+}
+
+.dash-state{
+  text-align:center;padding:64px 20px;color:var(--muted);
+  font-size:15px;line-height:1.7;
+}
+.dash-state .spin{
+  width:34px;height:34px;margin:0 auto 18px;border-radius:50%;
+  border:3px solid var(--line);border-top-color:var(--blue);
+  animation:dashSpin .8s linear infinite;
+}
+@keyframes dashSpin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV (minimal, app context) ============ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
+      LeadIntel CRM
+    </a>
+    <div class="nav-cta">
+      <button class="btn btn-outline-light btn-sm" id="logoutBtn">Sign out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ DASH HERO ============ -->
+<header class="dash-hero">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <div class="dash-head">
+      <div>
+        <div class="eyebrow enter" style="--enter-delay:0s;color:var(--blue-bright);"><span class="dot"></span> LIVE LEAD QUEUE</div>
+        <h1 class="enter" style="--enter-delay:.08s;margin-top:14px;">Your leads, ranked.</h1>
+        <div class="who enter" id="whoAmI" style="--enter-delay:.16s;"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STATS + LEADS ============ -->
+<section class="dash-section" style="padding-top:0;">
+  <div class="wrap">
+    <div class="dash-stats" id="dashStats" hidden>
+      <div class="dash-stat hot"><b id="stHot">0</b><span>Hot leads</span></div>
+      <div class="dash-stat warm"><b id="stWarm">0</b><span>Warm leads</span></div>
+      <div class="dash-stat"><b id="stTotal">0</b><span>Total leads</span></div>
+      <div class="dash-stat value"><b id="stValue">$0</b><span>Est. pipeline</span></div>
+    </div>
+
+    <div class="dash-toolbar" id="dashToolbar" hidden style="margin-top:40px;">
+      <span class="ttl">Sorted by priority, then score</span>
+      <div class="dash-filter" id="dashFilter">
+        <button data-f="ALL" class="on">ALL</button>
+        <button data-f="HOT">HOT</button>
+        <button data-f="WARM">WARM</button>
+        <button data-f="COLD">COLD</button>
+      </div>
+    </div>
+
+    <div id="leadList"></div>
+
+    <div class="dash-state" id="dashLoading">
+      <div class="spin"></div>
+      Loading your leads…
+    </div>
+    <div class="dash-state" id="dashEmpty" hidden>
+      No leads in your queue yet. New leads will show up here automatically, scored and ranked.
+    </div>
+    <div class="dash-state" id="dashError" hidden>
+      We couldn't load your leads right now. <br>
+      <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="window.location.reload()">Try again</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER (slim) ============ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-bottom" style="padding-top:0;">
+      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
+      <span><a href="privacy.html" style="color:var(--dark-text);">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:var(--dark-text);">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var PRIORITY_ORDER = { HOT: 0, WARM: 1, COLD: 2 };
+  var allLeads = [];
+  var filter = 'ALL';
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function money(n) {
+    if (n == null) return null;
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function priClass(p) {
+    return p === 'HOT' ? 'hot' : p === 'WARM' ? 'warm' : 'cold';
+  }
+
+  function render() {
+    var list = $('leadList');
+    var leads = filter === 'ALL' ? allLeads : allLeads.filter(function (l) { return l.priority === filter; });
+    if (!leads.length) {
+      list.innerHTML = '';
+      $('dashEmpty').hidden = false;
+      $('dashEmpty').textContent = allLeads.length
+        ? 'No ' + filter.toLowerCase() + ' leads right now.'
+        : 'No leads in your queue yet. New leads will show up here automatically, scored and ranked.';
+      return;
+    }
+    $('dashEmpty').hidden = true;
+    list.innerHTML = leads.map(function (l) {
+      var pc = priClass(l.priority);
+      var meta = [];
+      if (l.phone) meta.push('<span>📞 <a href="tel:' + esc(l.phone).replace(/[^0-9+]/g, '') + '">' + esc(l.phone) + '</a></span>');
+      if (l.email) meta.push('<span>✉️ <a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></span>');
+      if (l.estimatedValue != null) meta.push('<span class="ev">Est. ' + money(l.estimatedValue) + '</span>');
+      var rows = [];
+      if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
+      if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
+      return (
+        '<div class="lead-card is-' + pc + '">' +
+          '<div class="lead-top">' +
+            '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
+            '<div class="lead-badges">' +
+              (l.priority ? '<span class="pri-badge pri-' + pc + '">' + esc(l.priority) + '</span>' : '') +
+              (l.score != null ? '<span class="score-badge">' + esc(l.score) + ' / 100</span>' : '') +
+              (l.status ? '<span class="status-chip">' + esc(l.status) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+          (meta.length ? '<div class="lead-meta">' + meta.join('') + '</div>' : '') +
+          (rows.length ? '<div class="lead-body">' + rows.join('') + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  fetch('/api/leads', { credentials: 'same-origin' })
+    .then(function (res) {
+      if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
+      if (!res.ok) throw new Error('failed');
+      return res.json();
+    })
+    .then(function (data) {
+      $('dashLoading').hidden = true;
+      $('whoAmI').textContent = data.email || '';
+      allLeads = (data.leads || []).slice().sort(function (a, b) {
+        var pa = PRIORITY_ORDER[a.priority] != null ? PRIORITY_ORDER[a.priority] : 3;
+        var pb = PRIORITY_ORDER[b.priority] != null ? PRIORITY_ORDER[b.priority] : 3;
+        if (pa !== pb) return pa - pb;
+        return (b.score || 0) - (a.score || 0);
+      });
+
+      var hot = allLeads.filter(function (l) { return l.priority === 'HOT'; }).length;
+      var warm = allLeads.filter(function (l) { return l.priority === 'WARM'; }).length;
+      var value = allLeads.reduce(function (s, l) { return s + (l.estimatedValue || 0); }, 0);
+      $('stHot').textContent = hot;
+      $('stWarm').textContent = warm;
+      $('stTotal').textContent = allLeads.length;
+      $('stValue').textContent = money(value) || '$0';
+      $('dashStats').hidden = false;
+      $('dashToolbar').hidden = false;
+      render();
+    })
+    .catch(function (err) {
+      if (err.message === 'unauthenticated') return;
+      $('dashLoading').hidden = true;
+      $('dashError').hidden = false;
+    });
+
+  $('dashFilter').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-f]');
+    if (!btn) return;
+    filter = btn.dataset.f;
+    this.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b === btn); });
+    render();
+  });
+
+  $('logoutBtn').addEventListener('click', function () {
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+      .finally(function () { window.location.href = '/login'; });
+  });
+})();
+</script>
+</body>
+</html>
