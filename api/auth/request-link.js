@@ -57,7 +57,12 @@ module.exports = async (req, res) => {
       [cfg.MAGIC_EXPIRES_FIELD]: new Date(Date.now() + cfg.MAGIC_LINK_TTL_MS).toISOString()
     });
 
-    const origin = process.env.APP_URL || `https://${req.headers.host}`;
+    const origin = process.env.APP_URL;
+    if (!origin) {
+      // Never fall back to req.headers.host — on Vercel that is the
+      // per-deployment hash URL, which produces broken/rotating links.
+      throw new Error('APP_URL is not configured; refusing to build a magic link');
+    }
     const link = `${origin.replace(/\/$/, '')}/api/auth/verify?token=${token}`;
     await sendMagicLinkEmail(email, link);
 
