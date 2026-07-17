@@ -77,7 +77,12 @@ module.exports = async (req, res) => {
 async function sendMagicLinkEmail(to, link) {
   const key = process.env.RESEND_API_KEY;
   if (!key) throw new Error('RESEND_API_KEY is not configured');
-  const from = process.env.MAGIC_LINK_FROM_EMAIL || 'LeadIntel CRM <onboarding@resend.dev>';
+  const from = process.env.MAGIC_LINK_FROM_EMAIL;
+  if (!from) {
+    // Never fall back to the Resend test sender — it only delivers to the
+    // account owner and isn't your verified domain.
+    throw new Error('MAGIC_LINK_FROM_EMAIL is not configured; refusing to send from a fallback address');
+  }
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
