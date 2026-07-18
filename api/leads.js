@@ -34,7 +34,9 @@ module.exports = async (req, res) => {
       details: r.fields[f.details] || '',
       score: numberOrNull(r.fields[f.score]),
       priority: String(r.fields[f.priority] || '').toUpperCase(),
-      estimatedValue: numberOrNull(r.fields[f.estimatedValue]),
+      // Returned as the raw stored text (e.g. "$10,000–$12,000"); the
+      // client displays it verbatim and parses ranges for the total.
+      estimatedValue: r.fields[f.estimatedValue] != null ? String(r.fields[f.estimatedValue]) : '',
       recommendedAction: r.fields[f.recommendedAction] || '',
       status: r.fields[f.status] || ''
     }));
