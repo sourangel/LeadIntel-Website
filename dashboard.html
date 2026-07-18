@@ -225,6 +225,21 @@
   function priClass(p) {
     return p === 'HOT' ? 'hot' : p === 'WARM' ? 'warm' : 'cold';
   }
+  // Parse an Estimated Value into a numeric contribution for the pipeline
+  // total. Handles ranges ("$10,000–$12,000" -> average of low & high) and
+  // single values ("$8,500" -> 8500). Returns 0 when no number is present.
+  function estValueNumber(raw) {
+    if (raw == null || raw === '') return 0;
+    if (typeof raw === 'number') return isFinite(raw) ? raw : 0;
+    var tokens = String(raw).match(/\d[\d,]*(?:\.\d+)?/g);
+    if (!tokens) return 0;
+    var nums = tokens
+      .map(function (t) { return parseFloat(t.replace(/,/g, '')); })
+      .filter(function (n) { return isFinite(n); });
+    if (!nums.length) return 0;
+    if (nums.length === 1) return nums[0];
+    return (Math.min.apply(null, nums) + Math.max.apply(null, nums)) / 2;
+  }
 
   function render() {
     var list = $('leadList');
@@ -243,7 +258,7 @@
       var meta = [];
       if (l.phone) meta.push('<span>📞 <a href="tel:' + esc(l.phone).replace(/[^0-9+]/g, '') + '">' + esc(l.phone) + '</a></span>');
       if (l.email) meta.push('<span>✉️ <a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></span>');
-      if (l.estimatedValue != null) meta.push('<span class="ev">Est. ' + money(l.estimatedValue) + '</span>');
+      if (l.estimatedValue) meta.push('<span class="ev">Est. ' + esc(l.estimatedValue) + '</span>');
       var rows = [];
       if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
       if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
@@ -282,7 +297,7 @@
 
       var hot = allLeads.filter(function (l) { return l.priority === 'HOT'; }).length;
       var warm = allLeads.filter(function (l) { return l.priority === 'WARM'; }).length;
-      var value = allLeads.reduce(function (s, l) { return s + (l.estimatedValue || 0); }, 0);
+      var value = allLeads.reduce(function (s, l) { return s + estValueNumber(l.estimatedValue); }, 0);
       $('stHot').textContent = hot;
       $('stWarm').textContent = warm;
       $('stTotal').textContent = allLeads.length;
