@@ -176,7 +176,8 @@
         trade: document.getElementById('f-trade').value.trim(),
         lead_volume: document.getElementById('f-volume').value.trim(),
         current_process: document.getElementById('f-process').value.trim(),
-        pain_point: document.getElementById('f-pain').value.trim()
+        pain_point: document.getElementById('f-pain').value.trim(),
+        source: 'form'
       };
 
       fetch(WEBHOOK_URL, {
