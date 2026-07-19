@@ -177,7 +177,7 @@
         lead_volume: document.getElementById('f-volume').value.trim(),
         current_process: document.getElementById('f-process').value.trim(),
         pain_point: document.getElementById('f-pain').value.trim(),
-        source: 'form'
+        source: 'Form'
       };
 
       fetch(WEBHOOK_URL, {
