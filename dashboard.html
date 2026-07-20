@@ -93,6 +93,29 @@
   font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
   padding:5px 11px;border-radius:7px;background:rgba(34,176,133,0.11);color:var(--green);
 }
+.status-chip.st-new{background:rgba(46,124,246,0.13);color:var(--blue-deep);}
+.status-chip.st-contacted{background:rgba(11,15,23,0.07);color:var(--slate);}
+.status-chip.st-won{background:rgba(34,176,133,0.11);color:var(--green);}
+.status-chip.st-lost{background:rgba(214,69,69,0.12);color:var(--red);}
+
+/* Status control — the dashboard's only write action. */
+.status-set{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.04em;
+  padding:5px 26px 5px 10px;border-radius:7px;
+  border:1.5px solid var(--line);background:#fff;color:var(--slate);
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235B6B80' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 9px center;background-size:9px;
+  transition:border-color .2s, color .2s, opacity .2s;
+}
+.status-set:hover{border-color:var(--slate-soft);color:var(--ink);}
+.status-set:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+.status-set[disabled]{opacity:.55;cursor:progress;}
+.status-note{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.04em;
+  color:var(--red);
+}
+.status-note[hidden]{display:none !important;}
 .lead-meta{
   display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;
   font-size:13.5px;color:var(--muted);
@@ -208,6 +231,8 @@
   'use strict';
 
   var PRIORITY_ORDER = { HOT: 0, WARM: 1, COLD: 2 };
+  // Mirrors the server's allowed list; the server is the authority either way.
+  var STATUSES = ['New', 'Contacted', 'Won', 'Lost'];
   var allLeads = [];
   var filter = 'ALL';
 
@@ -224,6 +249,35 @@
   }
   function priClass(p) {
     return p === 'HOT' ? 'hot' : p === 'WARM' ? 'warm' : 'cold';
+  }
+  // Canonical status match, or '' when the stored value isn't one of the four.
+  function canonStatus(s) {
+    var needle = String(s || '').trim().toLowerCase();
+    for (var i = 0; i < STATUSES.length; i++) {
+      if (STATUSES[i].toLowerCase() === needle) return STATUSES[i];
+    }
+    return '';
+  }
+  function statusChip(l) {
+    var canon = canonStatus(l.status);
+    if (!l.status) return '';
+    var cls = canon ? ' st-' + canon.toLowerCase() : '';
+    return '<span class="status-chip' + cls + '" data-role="chip">' + esc(l.status) + '</span>';
+  }
+  function statusSelect(l) {
+    var canon = canonStatus(l.status);
+    var opts = STATUSES.map(function (s) {
+      return '<option value="' + s + '"' + (s === canon ? ' selected' : '') + '>' + s + '</option>';
+    });
+    // Leads with no status (or an unrecognized one) start on a placeholder so
+    // nothing is silently mislabeled before the contractor picks a value.
+    if (!canon) {
+      opts.unshift('<option value="" disabled selected>' + (l.status ? 'Set status…' : '— Set status —') + '</option>');
+    }
+    return (
+      '<select class="status-set" data-role="status" aria-label="Update status for ' +
+      esc(l.name || 'this lead') + '">' + opts.join('') + '</select>'
+    );
   }
   // Parse an Estimated Value into a numeric contribution for the pipeline
   // total. Handles ranges ("$10,000–$12,000" -> average of low & high) and
@@ -263,13 +317,15 @@
       if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
       if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
       return (
-        '<div class="lead-card is-' + pc + '">' +
+        '<div class="lead-card is-' + pc + '" data-id="' + esc(l.id) + '">' +
           '<div class="lead-top">' +
             '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
             '<div class="lead-badges">' +
               (l.priority ? '<span class="pri-badge pri-' + pc + '">' + esc(l.priority) + '</span>' : '') +
               (l.score != null ? '<span class="score-badge">' + esc(l.score) + ' / 100</span>' : '') +
-              (l.status ? '<span class="status-chip">' + esc(l.status) + '</span>' : '') +
+              statusChip(l) +
+              statusSelect(l) +
+              '<span class="status-note" data-role="note" hidden></span>' +
             '</div>' +
           '</div>' +
           (meta.length ? '<div class="lead-meta">' + meta.join('') + '</div>' : '') +
@@ -319,6 +375,68 @@
     this.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b === btn); });
     render();
   });
+
+  // ---- Status updates (the one write path on this page) ----
+  $('leadList').addEventListener('change', function (e) {
+    var sel = e.target.closest('select[data-role="status"]');
+    if (!sel) return;
+    var card = sel.closest('.lead-card');
+    if (!card) return;
+
+    var id = card.dataset.id;
+    var next = sel.value;
+    var lead = allLeads.filter(function (l) { return l.id === id; })[0];
+    var previous = lead ? lead.status : '';
+    var note = card.querySelector('[data-role="note"]');
+
+    note.hidden = true;
+    sel.disabled = true;
+
+    fetch('/api/leads/update-status', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id, status: next })
+    })
+      .then(function (res) {
+        if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
+        return res.json().then(function (data) {
+          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not save');
+          return data;
+        });
+      })
+      .then(function (data) {
+        // Trust the server's canonical value, not the option text.
+        if (lead) lead.status = data.status;
+        paintStatus(card, data.status);
+        sel.disabled = false;
+      })
+      .catch(function (err) {
+        if (err.message === 'unauthenticated') return;
+        sel.disabled = false;
+        sel.value = canonStatus(previous);
+        note.textContent = err.message;
+        note.hidden = false;
+      });
+  });
+
+  // Repaints the badge in place — no reload, no refetch.
+  function paintStatus(card, status) {
+    var chip = card.querySelector('[data-role="chip"]');
+    if (!chip) {
+      chip = document.createElement('span');
+      chip.className = 'status-chip';
+      chip.setAttribute('data-role', 'chip');
+      card.querySelector('.lead-badges').insertBefore(
+        chip, card.querySelector('select[data-role="status"]')
+      );
+    }
+    chip.textContent = status;
+    chip.className = 'status-chip st-' + status.toLowerCase();
+    // Drop the placeholder once a real value is set.
+    var placeholder = card.querySelector('select[data-role="status"] option[value=""]');
+    if (placeholder) placeholder.remove();
+  }
 
   $('logoutBtn').addEventListener('click', function () {
     fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })

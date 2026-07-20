@@ -32,6 +32,10 @@ module.exports = {
     status: 'Status'
   },
 
+  // The only values writable into the Status field. Anything else is
+  // rejected outright — arbitrary text never reaches Airtable.
+  LEAD_STATUSES: ['New', 'Contacted', 'Won', 'Lost'],
+
   MAGIC_LINK_TTL_MS: 15 * 60 * 1000,        // 15 minutes
   SESSION_TTL_MS: 30 * 24 * 60 * 60 * 1000, // 30 days
   MAX_ACTIVE_LINKS_PER_EMAIL: 3
