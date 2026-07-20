@@ -38,7 +38,10 @@ module.exports = async (req, res) => {
       // client displays it verbatim and parses ranges for the total.
       estimatedValue: r.fields[f.estimatedValue] != null ? String(r.fields[f.estimatedValue]) : '',
       recommendedAction: r.fields[f.recommendedAction] || '',
-      status: r.fields[f.status] || ''
+      status: r.fields[f.status] || '',
+      // Airtable omits unchecked checkboxes, and bases that predate the field
+      // omit it entirely — both read as not archived.
+      archived: r.fields[f.archived] === true
     }));
 
     return res.status(200).json({ ok: true, email, leads });

@@ -29,7 +29,10 @@ module.exports = {
     priority: 'Priority',
     estimatedValue: 'Estimated Value',
     recommendedAction: 'Recommended Action',
-    status: 'Status'
+    status: 'Status',
+    // Checkbox, unchecked by default. Must exist in the template base and in
+    // every customer base, or archive writes fail with an Airtable 422.
+    archived: 'Archived'
   },
 
   // The only values writable into the Status field. Anything else is

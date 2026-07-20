@@ -116,6 +116,31 @@
   color:var(--red);
 }
 .status-note[hidden]{display:none !important;}
+
+/* Archive control */
+.arch-btn{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
+  padding:5px 11px;border-radius:7px;
+  border:1.5px solid var(--line);background:#fff;color:var(--muted-soft);
+  transition:border-color .2s, color .2s, opacity .2s;
+}
+.arch-btn:hover{border-color:var(--slate-soft);color:var(--ink);}
+.arch-btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+.arch-btn[disabled]{opacity:.55;cursor:progress;}
+.lead-card.is-archived{background:var(--mist);opacity:.82;}
+.lead-card.is-archived .lead-top h3{color:var(--muted);}
+.arch-tag{
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
+  padding:5px 11px;border-radius:7px;background:rgba(11,15,23,0.07);color:var(--muted-soft);
+}
+.arch-toggle{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
+  color:var(--muted);border-bottom:1.5px solid var(--line);padding-bottom:2px;
+  transition:color .2s, border-color .2s;
+}
+.arch-toggle:hover{color:var(--ink);border-color:var(--slate-soft);}
+.arch-toggle.on{color:var(--blue-deep);border-color:var(--blue);}
+.dash-toolbar .tools{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
 .lead-meta{
   display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;
   font-size:13.5px;color:var(--muted);
@@ -191,7 +216,10 @@
     </div>
 
     <div class="dash-toolbar" id="dashToolbar" hidden style="margin-top:40px;">
-      <span class="ttl">Sorted by priority, then score</span>
+      <div class="tools">
+        <span class="ttl">Sorted by priority, then score</span>
+        <button class="arch-toggle" id="archToggle" aria-pressed="false">Show archived</button>
+      </div>
       <div class="dash-filter" id="dashFilter">
         <button data-f="ALL" class="on">ALL</button>
         <button data-f="HOT">HOT</button>
@@ -235,6 +263,7 @@
   var STATUSES = ['New', 'Contacted', 'Won', 'Lost'];
   var allLeads = [];
   var filter = 'ALL';
+  var showArchived = false;
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -295,14 +324,47 @@
     return (Math.min.apply(null, nums) + Math.max.apply(null, nums)) / 2;
   }
 
+  // Archived leads are out of the working queue: hidden unless asked for, and
+  // never counted in the stats above.
+  function activeLeads() {
+    return allLeads.filter(function (l) { return !l.archived; });
+  }
+  function archivedCount() {
+    return allLeads.length - activeLeads().length;
+  }
+
+  function updateStats() {
+    var active = activeLeads();
+    var hot = active.filter(function (l) { return l.priority === 'HOT'; }).length;
+    var warm = active.filter(function (l) { return l.priority === 'WARM'; }).length;
+    var value = active.reduce(function (s, l) { return s + estValueNumber(l.estimatedValue); }, 0);
+    $('stHot').textContent = hot;
+    $('stWarm').textContent = warm;
+    $('stTotal').textContent = active.length;
+    $('stValue').textContent = money(value) || '$0';
+  }
+
+  function updateArchToggle() {
+    var n = archivedCount();
+    var btn = $('archToggle');
+    btn.textContent = showArchived
+      ? 'Hide archived' + (n ? ' (' + n + ')' : '')
+      : 'Show archived' + (n ? ' (' + n + ')' : '');
+    btn.classList.toggle('on', showArchived);
+    btn.setAttribute('aria-pressed', showArchived ? 'true' : 'false');
+  }
+
   function render() {
     var list = $('leadList');
-    var leads = filter === 'ALL' ? allLeads : allLeads.filter(function (l) { return l.priority === filter; });
+    var pool = showArchived ? allLeads : activeLeads();
+    var leads = filter === 'ALL' ? pool : pool.filter(function (l) { return l.priority === filter; });
     if (!leads.length) {
       list.innerHTML = '';
       $('dashEmpty').hidden = false;
       $('dashEmpty').textContent = allLeads.length
-        ? 'No ' + filter.toLowerCase() + ' leads right now.'
+        ? (filter === 'ALL'
+            ? 'No active leads right now.' + (archivedCount() ? ' You have ' + archivedCount() + ' archived.' : '')
+            : 'No ' + filter.toLowerCase() + ' leads right now.')
         : 'No leads in your queue yet. New leads will show up here automatically, scored and ranked.';
       return;
     }
@@ -317,14 +379,18 @@
       if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
       if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
       return (
-        '<div class="lead-card is-' + pc + '" data-id="' + esc(l.id) + '">' +
+        '<div class="lead-card is-' + pc + (l.archived ? ' is-archived' : '') + '" data-id="' + esc(l.id) + '">' +
           '<div class="lead-top">' +
             '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
             '<div class="lead-badges">' +
+              (l.archived ? '<span class="arch-tag">ARCHIVED</span>' : '') +
               (l.priority ? '<span class="pri-badge pri-' + pc + '">' + esc(l.priority) + '</span>' : '') +
               (l.score != null ? '<span class="score-badge">' + esc(l.score) + ' / 100</span>' : '') +
               statusChip(l) +
               statusSelect(l) +
+              '<button class="arch-btn" data-role="archive" data-next="' + (l.archived ? 'false' : 'true') + '">' +
+                (l.archived ? 'Unarchive' : 'Archive') +
+              '</button>' +
               '<span class="status-note" data-role="note" hidden></span>' +
             '</div>' +
           '</div>' +
@@ -351,13 +417,8 @@
         return (b.score || 0) - (a.score || 0);
       });
 
-      var hot = allLeads.filter(function (l) { return l.priority === 'HOT'; }).length;
-      var warm = allLeads.filter(function (l) { return l.priority === 'WARM'; }).length;
-      var value = allLeads.reduce(function (s, l) { return s + estValueNumber(l.estimatedValue); }, 0);
-      $('stHot').textContent = hot;
-      $('stWarm').textContent = warm;
-      $('stTotal').textContent = allLeads.length;
-      $('stValue').textContent = money(value) || '$0';
+      updateStats();
+      updateArchToggle();
       $('dashStats').hidden = false;
       $('dashToolbar').hidden = false;
       render();
@@ -418,6 +479,56 @@
         note.textContent = err.message;
         note.hidden = false;
       });
+  });
+
+  // ---- Archive / unarchive ----
+  $('leadList').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-role="archive"]');
+    if (!btn) return;
+    var card = btn.closest('.lead-card');
+    if (!card) return;
+
+    var id = card.dataset.id;
+    var next = btn.dataset.next === 'true';
+    var lead = allLeads.filter(function (l) { return l.id === id; })[0];
+    var note = card.querySelector('[data-role="note"]');
+
+    note.hidden = true;
+    btn.disabled = true;
+
+    fetch('/api/leads/archive', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: id, archived: next })
+    })
+      .then(function (res) {
+        if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
+        return res.json().then(function (data) {
+          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not save');
+          return data;
+        });
+      })
+      .then(function (data) {
+        if (lead) lead.archived = data.archived;
+        // Archiving pulls the card out of the default view, so re-render
+        // rather than patching this card in place.
+        updateStats();
+        updateArchToggle();
+        render();
+      })
+      .catch(function (err) {
+        if (err.message === 'unauthenticated') return;
+        btn.disabled = false;
+        note.textContent = err.message;
+        note.hidden = false;
+      });
+  });
+
+  $('archToggle').addEventListener('click', function () {
+    showArchived = !showArchived;
+    updateArchToggle();
+    render();
   });
 
   // Repaints the badge in place — no reload, no refetch.
