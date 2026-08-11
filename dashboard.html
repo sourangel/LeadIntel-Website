@@ -65,6 +65,19 @@
 .dash-filter button:hover{border-color:var(--slate-soft);color:var(--ink);}
 .dash-filter button.on{background:var(--ink);border-color:var(--ink);color:#fff;}
 
+/* Sort control — pill-shaped to sit with the filter buttons. */
+.dash-sort{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
+  padding:8px 30px 8px 14px;border-radius:100px;
+  border:1.5px solid var(--line);background:#fff;color:var(--muted);
+  cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235B6B80' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:9px;
+  transition:border-color .2s, color .2s;
+}
+.dash-sort:hover{border-color:var(--slate-soft);color:var(--ink);}
+.dash-sort:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
+
 .lead-card{
   background:#fff;border:1px solid var(--line);border-radius:16px;
   padding:22px 24px;margin-bottom:14px;
@@ -76,6 +89,7 @@
 .lead-card.is-cold{border-left:3px solid var(--line);}
 .lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
 .lead-top h3{font-family:var(--display);font-size:17.5px;font-weight:700;color:var(--ink);}
+.lead-when{display:block;margin-top:5px;font-family:var(--mono);font-size:11.5px;color:var(--muted-soft);}
 .lead-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .pri-badge{
   font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.07em;
@@ -217,7 +231,11 @@
 
     <div class="dash-toolbar" id="dashToolbar" hidden style="margin-top:40px;">
       <div class="tools">
-        <span class="ttl">Sorted by priority, then score</span>
+        <select class="dash-sort" id="dashSort" aria-label="Sort leads">
+          <option value="priority">Priority, then score</option>
+          <option value="created">Newest first</option>
+          <option value="score">Highest score first</option>
+        </select>
         <button class="arch-toggle" id="archToggle" aria-pressed="false">Show archived</button>
       </div>
       <div class="dash-filter" id="dashFilter">
@@ -263,6 +281,7 @@
   var STATUSES = ['New', 'Contacted', 'Won', 'Lost'];
   var allLeads = [];
   var filter = 'ALL';
+  var sortBy = 'priority';
   var showArchived = false;
 
   var $ = function (id) { return document.getElementById(id); };
@@ -324,6 +343,44 @@
     return (Math.min.apply(null, nums) + Math.max.apply(null, nums)) / 2;
   }
 
+  // Created is whatever Airtable stored; anything unparseable is treated the
+  // same as a missing value so old records never break the list.
+  function createdTime(raw) {
+    if (!raw) return null;
+    var t = new Date(raw).getTime();
+    return isFinite(t) ? t : null;
+  }
+  // "Aug 11, 6:42 AM" in the viewer's own timezone.
+  function formatCreated(raw) {
+    var t = createdTime(raw);
+    if (t == null) return '';
+    return new Date(t).toLocaleString('en-US', {
+      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+    });
+  }
+
+  var SORTS = {
+    priority: function (a, b) {
+      var pa = PRIORITY_ORDER[a.priority] != null ? PRIORITY_ORDER[a.priority] : 3;
+      var pb = PRIORITY_ORDER[b.priority] != null ? PRIORITY_ORDER[b.priority] : 3;
+      if (pa !== pb) return pa - pb;
+      return (b.score || 0) - (a.score || 0);
+    },
+    // Undated leads sink to the bottom rather than leading the list.
+    created: function (a, b) {
+      var ta = createdTime(a.created);
+      var tb = createdTime(b.created);
+      if (ta == null && tb == null) return SORTS.priority(a, b);
+      if (ta == null) return 1;
+      if (tb == null) return -1;
+      return tb - ta;
+    },
+    score: function (a, b) {
+      var d = (b.score || 0) - (a.score || 0);
+      return d !== 0 ? d : SORTS.priority(a, b);
+    }
+  };
+
   // Archived leads are out of the working queue: hidden unless asked for, and
   // never counted in the stats above.
   function activeLeads() {
@@ -358,6 +415,8 @@
     var list = $('leadList');
     var pool = showArchived ? allLeads : activeLeads();
     var leads = filter === 'ALL' ? pool : pool.filter(function (l) { return l.priority === filter; });
+    // Sort and filter are independent: both are applied fresh on every render.
+    leads = leads.slice().sort(SORTS[sortBy] || SORTS.priority);
     if (!leads.length) {
       list.innerHTML = '';
       $('dashEmpty').hidden = false;
@@ -378,10 +437,14 @@
       var rows = [];
       if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
       if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
+      var when = formatCreated(l.created);
       return (
         '<div class="lead-card is-' + pc + (l.archived ? ' is-archived' : '') + '" data-id="' + esc(l.id) + '">' +
           '<div class="lead-top">' +
-            '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
+            '<div>' +
+              '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
+              (when ? '<span class="lead-when">' + esc(when) + '</span>' : '') +
+            '</div>' +
             '<div class="lead-badges">' +
               (l.archived ? '<span class="arch-tag">ARCHIVED</span>' : '') +
               (l.priority ? '<span class="pri-badge pri-' + pc + '">' + esc(l.priority) + '</span>' : '') +
@@ -410,12 +473,8 @@
     .then(function (data) {
       $('dashLoading').hidden = true;
       $('whoAmI').textContent = data.email || '';
-      allLeads = (data.leads || []).slice().sort(function (a, b) {
-        var pa = PRIORITY_ORDER[a.priority] != null ? PRIORITY_ORDER[a.priority] : 3;
-        var pb = PRIORITY_ORDER[b.priority] != null ? PRIORITY_ORDER[b.priority] : 3;
-        if (pa !== pb) return pa - pb;
-        return (b.score || 0) - (a.score || 0);
-      });
+      // Order is decided at render time by the active sort.
+      allLeads = (data.leads || []).slice();
 
       updateStats();
       updateArchToggle();
@@ -434,6 +493,14 @@
     if (!btn) return;
     filter = btn.dataset.f;
     this.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b === btn); });
+    render();
+  });
+
+  // Browsers restore a select's value across reloads; the default is priority.
+  $('dashSort').value = sortBy;
+  // Sort is independent of the filter and the archived toggle — only re-render.
+  $('dashSort').addEventListener('change', function () {
+    sortBy = this.value;
     render();
   });
 

@@ -41,7 +41,10 @@ module.exports = async (req, res) => {
       status: r.fields[f.status] || '',
       // Airtable omits unchecked checkboxes, and bases that predate the field
       // omit it entirely — both read as not archived.
-      archived: r.fields[f.archived] === true
+      archived: r.fields[f.archived] === true,
+      // ISO timestamp as Airtable stores it; older records may not have one,
+      // in which case the client renders nothing.
+      created: r.fields[f.created] ? String(r.fields[f.created]) : ''
     }));
 
     return res.status(200).json({ ok: true, email, leads });
