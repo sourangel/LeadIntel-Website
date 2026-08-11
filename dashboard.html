@@ -343,6 +343,30 @@
     return (Math.min.apply(null, nums) + Math.max.apply(null, nums)) / 2;
   }
 
+  // Fills the Project block: one line per " • " segment, and for segments
+  // shaped "Label: value" the label is bolded. createElement/textContent only —
+  // this text is visitor-supplied and must never be parsed as markup.
+  function fillDetails(el, details) {
+    var segments = String(details || '').split(' • ');
+    var written = 0;
+    segments.forEach(function (segment) {
+      var text = segment.trim();
+      if (!text) return;
+      if (written) el.appendChild(document.createElement('br'));
+      written++;
+      var split = text.indexOf(': ');
+      if (split === -1) {
+        el.appendChild(document.createTextNode(text));
+        return;
+      }
+      var label = document.createElement('strong');
+      label.textContent = text.slice(0, split);
+      el.appendChild(label);
+      // Keeps the ": " separator with the value, unbolded.
+      el.appendChild(document.createTextNode(text.slice(split)));
+    });
+  }
+
   // Created is whatever Airtable stored; anything unparseable is treated the
   // same as a missing value so old records never break the list.
   function createdTime(raw) {
@@ -436,7 +460,8 @@
       if (l.estimatedValue) meta.push('<span class="ev">Est. ' + esc(l.estimatedValue) + '</span>');
       var rows = [];
       if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
-      if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v">' + esc(l.details) + '</span></div>');
+      // Left empty on purpose — fillDetails() populates it with real nodes.
+      if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v" data-role="details"></span></div>');
       var when = formatCreated(l.created);
       return (
         '<div class="lead-card is-' + pc + (l.archived ? ' is-archived' : '') + '" data-id="' + esc(l.id) + '">' +
@@ -462,6 +487,15 @@
         '</div>'
       );
     }).join('');
+
+    // Details is free text a website visitor typed, so it is never handed to
+    // the HTML parser — each card's Project block is built from real nodes.
+    list.querySelectorAll('.lead-card').forEach(function (card) {
+      var target = card.querySelector('[data-role="details"]');
+      if (!target) return;
+      var lead = leads.filter(function (l) { return l.id === card.dataset.id; })[0];
+      if (lead) fillDetails(target, lead.details);
+    });
   }
 
   fetch('/api/leads', { credentials: 'same-origin' })
