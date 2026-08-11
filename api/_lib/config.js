@@ -32,7 +32,9 @@ module.exports = {
     status: 'Status',
     // Checkbox, unchecked by default. Must exist in the template base and in
     // every customer base, or archive writes fail with an Airtable 422.
-    archived: 'Archived'
+    archived: 'Archived',
+    // Read-only timestamp. Bases predating the field simply omit it.
+    created: 'Created'
   },
 
   // The only values writable into the Status field. Anything else is

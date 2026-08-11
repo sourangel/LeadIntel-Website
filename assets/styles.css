@@ -185,6 +185,9 @@ html.js .enter{
 .nav-cta .ghost-link{font-size:14.5px;font-weight:600;color:#fff;display:none;opacity:.85;transition:opacity .2s;}
 .nav-cta .ghost-link:hover{opacity:1;}
 @media (min-width:960px){ .nav-cta .ghost-link{display:inline;} }
+/* Hidden on small screens like .nav-links — it lives in the mobile menu there. */
+.nav-cta .btn-outline-nav{display:none;}
+@media (min-width:840px){ .nav-cta .btn-outline-nav{display:inline-flex;} }
 
 /* mobile menu */
 .nav-burger{
@@ -221,6 +224,8 @@ html.js .enter{
 }
 .mobile-menu a:hover{color:#fff;}
 .mobile-menu .btn{margin-top:18px;width:100%;}
+/* Keep the outline unbroken — .mobile-menu a's divider would recolor it. */
+.mobile-menu .btn-outline-nav{border-bottom-color:rgba(255,255,255,0.28);}
 @media (min-width:840px){ .mobile-menu{display:none !important;} }
 
 /* ============================================================
@@ -259,6 +264,13 @@ html.js .enter{
   border:1.5px solid rgba(255,255,255,0.28);color:#fff;
 }
 .btn-outline-light:hover{border-color:#fff;background:rgba(255,255,255,0.08);transform:translateY(-2px);}
+
+/* Nav-weight outline: reads above the plain nav links, below the primary CTA. */
+.btn-outline-nav{
+  background:transparent;
+  border:1.5px solid rgba(255,255,255,0.28);color:var(--dark-text);
+}
+.btn-outline-nav:hover{border-color:#fff;color:#fff;transform:translateY(-2px);}
 
 .btn-outline{
   background:transparent;border:1.5px solid var(--line);color:var(--ink);
