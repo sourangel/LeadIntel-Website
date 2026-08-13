@@ -94,17 +94,43 @@
     steps.forEach(function (s) { stepIO.observe(s); });
   }
 
-  /* ---------- Hero ticker simulation (index only) ---------- */
+  /* ---------- Hero ticker simulation (index only) ----------
+     The first row re-scores on every lap of the countdown: it drops back
+     to SCORING… when the clock reads 00:00, then lands on its score a few
+     seconds later. The estimated value only shows once it has a score. */
   var scoreA = document.getElementById('scoreA');
+  var estA = document.getElementById('estA');
   var clk = document.getElementById('clk');
+  var SCORE_DELAY_MS = 3000;
+  var scoreTimer;
+
+  var showScoring = function () {
+    scoreA.textContent = 'SCORING…';
+    scoreA.classList.remove('score-hot');
+    scoreA.classList.add('score-scoring');
+    if (estA) estA.hidden = true;
+  };
+  var showScored = function () {
+    scoreA.textContent = 'HOT · 96';
+    scoreA.classList.remove('score-scoring');
+    scoreA.classList.add('score-hot');
+    if (estA) estA.hidden = false;
+  };
+
   if (scoreA) {
-    setTimeout(function () { scoreA.textContent = 'HOT · 96'; }, 1400);
+    scoreTimer = setTimeout(showScored, SCORE_DELAY_MS);
   }
   if (clk) {
     var seconds = 4;
     setInterval(function () {
       seconds = seconds <= 0 ? 12 : seconds - 1;
       clk.textContent = '00:' + String(seconds).padStart(2, '0');
+      // Every time the countdown lands on zero, the lead re-scores.
+      if (seconds === 0 && scoreA) {
+        clearTimeout(scoreTimer);
+        showScoring();
+        scoreTimer = setTimeout(showScored, SCORE_DELAY_MS);
+      }
     }, 1000);
   }
 
