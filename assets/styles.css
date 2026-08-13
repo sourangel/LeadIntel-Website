@@ -444,7 +444,9 @@ html.js .enter{
   padding:5px 10px;border-radius:7px;flex-shrink:0;
   transition:background .4s, color .4s;
 }
-.score-hot{background:rgba(46,124,246,0.18);color:var(--blue-bright);}
+/* Blue while a lead is still being scored; red once it lands as HOT. */
+.score-scoring{background:rgba(46,124,246,0.18);color:var(--blue-bright);}
+.score-hot{background:rgba(214,69,69,0.18);color:#FF7A7A;}
 .score-warm{background:rgba(34,176,133,0.16);color:var(--green);}
 .score-pending{background:rgba(255,255,255,0.08);color:var(--muted-soft);}
 
