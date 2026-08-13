@@ -439,6 +439,9 @@ html.js .enter{
 .lead-info{flex:1;min-width:0;}
 .lead-info .nm{font-size:14px;font-weight:600;color:#fff;}
 .lead-info .jb{font-size:12.5px;color:var(--muted-soft);margin-top:2px;}
+/* An unscored lead has no value yet, but still holds the line so the row
+   keeps its height when the value appears. */
+.lead-info .jb.is-reserved{visibility:hidden;}
 .lead-score{
   font-family:var(--mono);font-size:12.5px;font-weight:600;
   padding:5px 10px;border-radius:7px;flex-shrink:0;

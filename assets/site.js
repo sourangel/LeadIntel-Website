@@ -97,7 +97,8 @@
   /* ---------- Hero ticker simulation (index only) ----------
      The first row re-scores on every lap of the countdown: it drops back
      to SCORING… when the clock reads 00:00, then lands on its score a few
-     seconds later. The estimated value only shows once it has a score. */
+     seconds later. The estimated value only shows once it has a score, but
+     keeps its space either way so the row height never jumps. */
   var scoreA = document.getElementById('scoreA');
   var estA = document.getElementById('estA');
   var clk = document.getElementById('clk');
@@ -108,13 +109,13 @@
     scoreA.textContent = 'SCORING…';
     scoreA.classList.remove('score-hot');
     scoreA.classList.add('score-scoring');
-    if (estA) estA.hidden = true;
+    if (estA) estA.classList.add('is-reserved');
   };
   var showScored = function () {
     scoreA.textContent = 'HOT · 96';
     scoreA.classList.remove('score-scoring');
     scoreA.classList.add('score-hot');
-    if (estA) estA.hidden = false;
+    if (estA) estA.classList.remove('is-reserved');
   };
 
   if (scoreA) {
