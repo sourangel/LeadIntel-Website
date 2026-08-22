@@ -1,200 +1,185 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pricing — LeadIntel CRM</title>
-<meta name="description" content="LeadIntel CRM plans for every lead volume — Starter, Growth, and Pro tiers starting at $349/mo. Book a call for a custom quote built around your business.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing | LeadIntel CRM</title>
+<meta name="description" content="LeadIntel CRM pricing tiers for contractors, scaled to your weekly lead volume.">
+<meta name="theme-color" content="#040910">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
-<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
-<nav class="nav">
-  <div class="wrap nav-inner">
-    <a href="index.html" class="brand">
-      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
-      LeadIntel CRM
+<a class="sr-only" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="index.html" aria-label="LeadIntel CRM home">
+      <img class="logo-mark" src="assets/logo-mark-128.png" width="34" height="34" alt="" aria-hidden="true" decoding="async">
+      <span class="logo-word">LeadIntel</span>
     </a>
-    <div class="nav-links">
+    <nav class="nav" aria-label="Primary">
       <a href="index.html#problem">Problem</a>
-      <a href="index.html#how-it-works">How it Works</a>
+      <a href="index.html#how-it-works">How it works</a>
       <a href="index.html#features">Features</a>
-      <a href="pricing.html">Pricing</a>
-    </div>
-    <div class="nav-cta">
-      <a class="ghost-link js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Demo</a>
-      <a class="btn btn-outline-nav btn-sm" href="login.html">Client Login</a>
-      <a class="btn btn-primary btn-sm" href="index.html#get-started">Get Started Now</a>
-      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+      <a href="pricing.html" style="color:var(--paper)">Pricing</a>
+    </nav>
+    <div class="header-actions">
+      <a class="link-login" href="login.html">Client login</a>
+      <a class="btn btn-primary btn-sm" href="https://calendly.com/juneflows26/30min">Book a demo</a>
+      <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#problem">Problem</a>
-  <a href="index.html#how-it-works">How it Works</a>
-  <a href="index.html#features">Features</a>
-  <a href="pricing.html">Pricing</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-  <a class="btn btn-outline-nav" href="login.html">Client Login</a>
-  <a class="btn btn-primary" href="index.html#get-started">Get Started Now</a>
-</div>
-
-<!-- ============ PAGE HERO ============ -->
-<header class="page-hero center overlap">
-  <div class="hero-glow"></div>
-  <div class="wrap">
-    <div class="eyebrow enter" style="--enter-delay:0s;"><span class="dot"></span> PRICING</div>
-    <h1 class="enter" style="--enter-delay:.1s;">Plans that scale with your lead flow.</h1>
-    <p class="enter" style="--enter-delay:.2s;">Pick the tier that matches your lead volume — then book a quick call and we'll build your exact quote around your business.</p>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#problem">Problem</a>
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Client login</a>
+    <a class="btn btn-primary" href="https://calendly.com/juneflows26/30min">Book a demo</a>
   </div>
 </header>
 
-<!-- ============ PRICING TIERS ============ -->
-<section style="padding-top:0;">
-  <div class="wrap">
-    <div class="tier-grid enter" style="--enter-delay:.3s;">
+<main id="main">
 
-      <!-- Starter -->
-      <div class="tier-card">
-        <div class="tier-name">Starter</div>
-        <div class="tier-fit">For contractors handling roughly 1–10 leads a week</div>
-        <div class="tier-price"><span class="from">Starting at</span><b>$349</b><span class="per">/mo</span></div>
-        <ul class="tier-list">
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Instant lead capture, 24/7</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> AI lead scoring tuned to your trade</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Your own dedicated lead database</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Automatic contractor alerts + customer email confirmations</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Standard support</li>
-        </ul>
-        <a class="btn btn-outline js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Call</a>
-      </div>
-
-      <!-- Growth (featured) -->
-      <div class="tier-card featured">
-        <div class="tier-badge">Most popular</div>
-        <div class="tier-name">Growth</div>
-        <div class="tier-fit">For contractors handling roughly 11–25 leads a week</div>
-        <div class="tier-price"><span class="from">Starting at</span><b>$499</b><span class="per">/mo</span></div>
-        <ul class="tier-list">
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Starter</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Built for higher lead volume</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Scoring and alerts that keep up as you grow</li>
-        </ul>
-        <a class="btn btn-primary js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Call</a>
-      </div>
-
-      <!-- Pro -->
-      <div class="tier-card">
-        <div class="tier-name">Pro</div>
-        <div class="tier-fit">For contractors handling roughly 26–50 leads a week</div>
-        <div class="tier-price"><span class="from">Starting at</span><b>$699</b><span class="per">/mo</span></div>
-        <ul class="tier-list">
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Growth</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority support — faster response, direct line</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Proactive check-ins</li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12L9 17L20 6" stroke="#22B085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Ongoing AI scoring optimization</li>
-        </ul>
-        <a class="btn btn-outline js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Call</a>
-      </div>
-
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow"><span class="dot"></span>Pricing</p>
+      <h1 class="h-lg">Plans that scale with your lead flow.</h1>
+      <p class="lede">Pick the tier that matches your lead volume, then book a quick call and we&rsquo;ll build your exact quote around your business.</p>
     </div>
+  </section>
 
-    <!-- Enterprise band -->
-    <div class="tier-enterprise" data-reveal>
-      <div class="txt">
-        <b>50+ leads a week, or multiple locations?</b>
-        <span>We'll design an enterprise setup around your operation — custom quote, no surprises.</span>
+  <section>
+    <div class="wrap">
+      <div class="tiers">
+        <article class="tier">
+          
+          <h3 class="tier-name">Starter</h3>
+          <p class="tier-for">For contractors handling roughly 1&ndash;10 leads a week</p>
+          <p class="tier-price"><small>Starting at</small>$349<span>/mo</span></p>
+          <ul><li>Instant lead capture, 24/7</li><li>AI lead scoring tuned to your trade</li><li>Your own dedicated lead database</li><li>Automatic contractor alerts + customer email confirmations</li><li>Standard support</li></ul>
+          <a class="btn btn-ghost" href="https://calendly.com/juneflows26/30min">Book a call</a>
+        </article>
+        <article class="tier featured">
+          <span class="tier-badge">Most popular</span>
+          <h3 class="tier-name">Growth</h3>
+          <p class="tier-for">For contractors handling roughly 11&ndash;25 leads a week</p>
+          <p class="tier-price"><small>Starting at</small>$499<span>/mo</span></p>
+          <ul><li>Everything in Starter</li><li>Built for higher lead volume</li><li>Scoring and alerts that keep up as you grow</li></ul>
+          <a class="btn btn-primary" href="https://calendly.com/juneflows26/30min">Book a call</a>
+        </article>
+        <article class="tier">
+          
+          <h3 class="tier-name">Pro</h3>
+          <p class="tier-for">For contractors handling roughly 26&ndash;50 leads a week</p>
+          <p class="tier-price"><small>Starting at</small>$699<span>/mo</span></p>
+          <ul><li>Everything in Growth</li><li>Priority support: faster response, direct line</li><li>Proactive check-ins</li><li>Ongoing AI scoring optimization</li></ul>
+          <a class="btn btn-ghost" href="https://calendly.com/juneflows26/30min">Book a call</a>
+        </article>
       </div>
-      <a class="btn btn-outline-light js-book-demo" href="https://calendly.com/juneflows26/30min">Let's Talk</a>
-    </div>
 
-    <p class="tier-note" data-reveal>Every price above is a starting point, not a checkout button. Book a quick call and we'll give you an exact quote built around your lead volume and your trade — no pressure, no obligation.</p>
-  </div>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section class="section-mist" style="padding-top:80px;">
-  <div class="wrap">
-    <div class="faq">
-      <h2 data-reveal>Common questions</h2>
-      <div data-reveal-stagger>
-        <div class="faq-item" data-reveal>
-          <h3>Why "starting at" instead of a fixed price?</h3>
-          <p>Lead volume and feature needs vary a lot between a small remodeling crew and a high-volume roofing company. The tiers show you where pricing lands — a quick conversation gets you an exact number that's actually fair for your business.</p>
+      <div class="callout">
+        <div>
+          <h3 class="h-sm">50+ leads a week, or multiple locations?</h3>
+          <p>We&rsquo;ll design an enterprise setup around your operation. Custom quote, no surprises.</p>
         </div>
-        <div class="faq-item" data-reveal>
-          <h3>Which tier is right for me?</h3>
-          <p>Go by your weekly lead volume — and if you're between tiers or growing fast, don't sweat it. On the call we'll look at your actual lead flow and recommend the right fit, not the biggest number.</p>
-        </div>
-        <div class="faq-item" data-reveal>
-          <h3>Is there a contract or commitment?</h3>
-          <p>We'll go over the details on your call — this is intentionally a conversation, not a checkout page.</p>
-        </div>
+        <a class="btn btn-ghost" href="https://calendly.com/juneflows26/30min">Let&rsquo;s talk</a>
+      </div>
+
+      <p class="tier-note">Every price above is a starting point, not a checkout button. Book a quick call and we&rsquo;ll give you an exact quote built around your lead volume and your trade. No pressure, no obligation.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span class="dot"></span>Questions</p>
+        <h2 class="h-lg">Common questions</h2>
+      </div>
+      <div class="faq">
+          <details>
+            <summary>Why &ldquo;starting at&rdquo; instead of a fixed price?</summary>
+            <p>Lead volume and feature needs vary a lot between a small remodeling crew and a high-volume roofing company. The tiers show you where pricing lands; a quick conversation gets you an exact number that&rsquo;s actually fair for your business.</p>
+          </details>
+          <details>
+            <summary>Which tier is right for me?</summary>
+            <p>Go by your weekly lead volume. If you&rsquo;re between tiers or growing fast, don&rsquo;t sweat it. On the call we&rsquo;ll look at your actual lead flow and recommend the right fit, not the biggest number.</p>
+          </details>
+          <details>
+            <summary>Is there a contract or commitment?</summary>
+            <p>We&rsquo;ll go over the details on your call. This is intentionally a conversation, not a checkout page.</p>
+          </details>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ FINAL CTA ============ -->
-<section class="final-cta">
-  <div class="wrap final-cta-inner" data-reveal>
-    <div class="eyebrow">READY WHEN YOU ARE</div>
-    <h2>Get your exact quote in one quick call.</h2>
-    <p>Tell us about your trade and your lead flow — we'll walk you through the right tier and give you a real number, live on the call.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary btn-lg js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Call — Get a Custom Quote</a>
-      <a class="btn btn-outline-light" href="index.html#get-started">Or send us your details</a>
+  <section id="get-started">
+    <div class="wrap">
+      <div class="closer">
+        <p class="eyebrow"><span class="dot"></span>Ready when you are</p>
+        <h2 class="h-lg">Get your exact quote in one quick call.</h2>
+        <p class="lede">Tell us about your trade and your lead flow. We&rsquo;ll walk you through the right tier and give you a real number, live on the call.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://calendly.com/juneflows26/30min">Book a call for a custom quote</a>
+          <a class="btn btn-ghost" href="index.html#get-started">Or send us your details</a>
+        </div>
+        <p class="hero-note">No commitment to book a call &middot; We'll walk through exactly how it'd work for your business, live</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ FOOTER ============ -->
-<footer>
+</main>
+
+<footer class="site-footer">
   <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <a href="index.html" class="brand">
-          <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
-          LeadIntel CRM
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html" aria-label="LeadIntel CRM home">
+          <img class="logo-mark" src="assets/logo-mark-128.png" width="34" height="34" alt="" aria-hidden="true" decoding="async">
+          <span class="logo-word">LeadIntel</span>
         </a>
         <p>AI-powered lead intelligence built for contractors who can't afford to lose a job to lag.</p>
-        <p style="margin-top:12px;">LeadIntel does not generate, buy, sell, or distribute leads. We are software contractors use to manage inquiries from their own websites.</p>
+        <p class="disclaimer">LeadIntel does not generate, buy, sell, or distribute leads. We are software contractors use to manage inquiries from their own websites.</p>
       </div>
-      <div class="foot-cols">
-        <div class="foot-col">
-          <h4>Product</h4>
-          <a href="index.html#how-it-works">How it Works</a>
-          <a href="index.html#features">Features</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="web-design.html">Website Redesign</a>
-        </div>
-        <div class="foot-col">
-          <h4>Company</h4>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-          <a href="login.html">Client Login</a>
-        </div>
-        <div class="foot-col">
-          <h4>Legal</h4>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-        </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="index.html#how-it-works">How it works</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html">Client login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="sms-optin.html">SMS alerts</a></li>
+        </ul>
       </div>
     </div>
-    <div class="foot-bottom">
-      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
+    <div class="footer-base">
+      <span>&copy; 2026 LeadIntel CRM. All rights reserved.</span>
       <span>Built for contractors from someone who's worked on the job site, not just behind a desk.</span>
     </div>
   </div>

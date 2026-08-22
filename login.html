@@ -1,134 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Client Login — LeadIntel CRM</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Client Login | LeadIntel CRM</title>
 <meta name="description" content="Sign in to your LeadIntel CRM lead dashboard.">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#040910">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
-<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
-<nav class="nav">
-  <div class="wrap nav-inner">
-    <a href="index.html" class="brand">
-      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
-      LeadIntel CRM
+<a class="sr-only" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="index.html" aria-label="LeadIntel CRM home">
+      <img class="logo-mark" src="assets/logo-mark-128.png" width="34" height="34" alt="" aria-hidden="true" decoding="async">
+      <span class="logo-word">LeadIntel</span>
     </a>
-    <div class="nav-links">
+    <nav class="nav" aria-label="Primary">
       <a href="index.html#problem">Problem</a>
-      <a href="index.html#how-it-works">How it Works</a>
+      <a href="index.html#how-it-works">How it works</a>
       <a href="index.html#features">Features</a>
       <a href="pricing.html">Pricing</a>
-    </div>
-    <div class="nav-cta">
-      <a class="ghost-link js-book-demo" href="https://calendly.com/juneflows26/30min">Book a Demo</a>
-      <a class="btn btn-outline-nav btn-sm" href="login.html">Client Login</a>
-      <a class="btn btn-primary btn-sm" href="index.html#get-started">Get Started Now</a>
-      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
+    </nav>
+    <div class="header-actions">
+      <a class="link-login" href="login.html">Client login</a>
+      <a class="btn btn-primary btn-sm" href="https://calendly.com/juneflows26/30min">Book a demo</a>
+      <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#problem">Problem</a>
-  <a href="index.html#how-it-works">How it Works</a>
-  <a href="index.html#features">Features</a>
-  <a href="pricing.html">Pricing</a>
-  <a href="about.html">About</a>
-  <a href="contact.html">Contact</a>
-  <a class="btn btn-outline-nav" href="login.html">Client Login</a>
-  <a class="btn btn-primary" href="index.html#get-started">Get Started Now</a>
-</div>
-
-<!-- ============ PAGE HERO ============ -->
-<header class="page-hero center overlap">
-  <div class="hero-glow"></div>
-  <div class="wrap">
-    <div class="eyebrow enter" style="--enter-delay:0s;"><span class="dot"></span> CLIENT LOGIN</div>
-    <h1 class="enter" style="--enter-delay:.1s;">Your lead dashboard.</h1>
-    <p class="enter" style="--enter-delay:.2s;">Enter the email on your account and we'll send you a secure one-time sign-in link. No password to remember.</p>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#problem">Problem</a>
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="index.html#features">Features</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Client login</a>
+    <a class="btn btn-primary" href="https://calendly.com/juneflows26/30min">Book a demo</a>
   </div>
 </header>
 
-<!-- ============ LOGIN CARD ============ -->
-<section style="padding-top:0;">
-  <div class="wrap">
-    <div class="optin-card enter" style="--enter-delay:.3s;max-width:520px;">
+<main id="main">
 
-      <div id="loginFormState">
-        <form id="loginForm">
+  <section class="page-hero center">
+    <div class="wrap">
+      <p class="eyebrow"><span class="dot"></span>Client login</p>
+      <h1 class="h-lg">Your lead dashboard.</h1>
+      <p class="lede">Enter the email on your account and we&rsquo;ll send you a secure one-time sign-in link. No password to remember.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:40px;">
+    <div class="wrap" style="display:flex;flex-direction:column;align-items:center;">
+
+      <div class="form-card" id="loginFormState">
+        <form id="loginForm" novalidate>
           <div class="field">
             <label for="l-email">Account email</label>
             <input type="email" id="l-email" name="email" autocomplete="email" required placeholder="you@yourcompany.com">
           </div>
-          <div class="form-state error" id="linkError" style="padding:14px 0 0;text-align:left;">
-            <p style="color:var(--red);font-size:13.5px;">That sign-in link was invalid or expired. Request a fresh one below.</p>
-          </div>
-          <button type="submit" class="btn btn-primary form-submit" id="loginSubmitBtn">Email me a sign-in link</button>
-          <div class="form-foot-note">Links work once and expire after 15 minutes.</div>
+          <p class="field-error" id="linkError" role="alert" hidden>That sign-in link was invalid or expired. Request a fresh one below.</p>
+          <button type="submit" class="btn btn-primary" id="loginSubmitBtn">Email me a sign-in link</button>
+          <p class="form-note">Links work once and expire after 15 minutes.</p>
         </form>
       </div>
 
-      <div class="form-state" id="loginSuccessState">
-        <div class="ico">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
-        </div>
-        <h3>Check your inbox</h3>
+      <div class="form-success" id="loginSuccessState" tabindex="-1" hidden>
+        <span class="tick" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg></span>
+        <h2 class="h-sm">Check your inbox</h2>
         <p id="loginSuccessMsg">If that email has dashboard access, a sign-in link is on its way. It expires in 15 minutes.</p>
       </div>
 
+      <p class="below-form" style="text-align:center;">Not a LeadIntel client yet? <a href="contact.html">Get in touch</a> and we&rsquo;ll set you up.</p>
     </div>
-    <div class="contact-note">Not a LeadIntel client yet? <a href="contact.html" style="color:var(--blue-deep);text-decoration:underline;text-underline-offset:3px;">Get in touch</a> and we'll set you up.</div>
-  </div>
-</section>
+  </section>
 
-<!-- ============ FOOTER ============ -->
-<footer>
+</main>
+
+<footer class="site-footer">
   <div class="wrap">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <a href="index.html" class="brand">
-          <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
-          LeadIntel CRM
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html" aria-label="LeadIntel CRM home">
+          <img class="logo-mark" src="assets/logo-mark-128.png" width="34" height="34" alt="" aria-hidden="true" decoding="async">
+          <span class="logo-word">LeadIntel</span>
         </a>
         <p>AI-powered lead intelligence built for contractors who can't afford to lose a job to lag.</p>
-        <p style="margin-top:12px;">LeadIntel does not generate, buy, sell, or distribute leads. We are software contractors use to manage inquiries from their own websites.</p>
+        <p class="disclaimer">LeadIntel does not generate, buy, sell, or distribute leads. We are software contractors use to manage inquiries from their own websites.</p>
       </div>
-      <div class="foot-cols">
-        <div class="foot-col">
-          <h4>Product</h4>
-          <a href="index.html#how-it-works">How it Works</a>
-          <a href="index.html#features">Features</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="web-design.html">Website Redesign</a>
-        </div>
-        <div class="foot-col">
-          <h4>Company</h4>
-          <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
-          <a href="login.html">Client Login</a>
-        </div>
-        <div class="foot-col">
-          <h4>Legal</h4>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-        </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="index.html#how-it-works">How it works</a></li>
+          <li><a href="index.html#features">Features</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html">Client login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+          <li><a href="sms-optin.html">SMS alerts</a></li>
+        </ul>
       </div>
     </div>
-    <div class="foot-bottom">
-      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
+    <div class="footer-base">
+      <span>&copy; 2026 LeadIntel CRM. All rights reserved.</span>
       <span>Built for contractors from someone who's worked on the job site, not just behind a desk.</span>
     </div>
   </div>
@@ -144,14 +142,16 @@
   var successState = document.getElementById('loginSuccessState');
   var successMsg = document.getElementById('loginSuccessMsg');
 
+  /* verify.js sends expired or already-used links here. */
   if (new URLSearchParams(window.location.search).get('error') === 'link') {
-    document.getElementById('linkError').classList.add('active');
+    document.getElementById('linkError').hidden = false;
   }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!form.reportValidity()) return;
     btn.disabled = true;
-    btn.textContent = 'Sending…';
+    btn.textContent = 'Sending\u2026';
     fetch('/api/auth/request-link', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -160,12 +160,14 @@
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data && data.message) successMsg.textContent = data.message;
-        formState.style.display = 'none';
-        successState.classList.add('active');
+        formState.hidden = true;
+        successState.hidden = false;
+        successState.focus();
       })
       .catch(function () {
-        formState.style.display = 'none';
-        successState.classList.add('active');
+        formState.hidden = true;
+        successState.hidden = false;
+        successState.focus();
       })
       .finally(function () {
         btn.disabled = false;
@@ -174,5 +176,6 @@
   });
 })();
 </script>
+
 </body>
 </html>

@@ -1,660 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lead Dashboard — LeadIntel CRM</title>
-<meta name="description" content="Your live lead queue, scored and prioritized.">
-<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Dashboard | LeadIntel CRM</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#040910">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
-<script>document.documentElement.classList.add('js');</script>
-<style>
-/* ---------- Dashboard-only styles (design tokens from styles.css) ---------- */
-[hidden]{display:none !important;}
-.dash-hero{background:var(--ink);position:relative;overflow:hidden;padding:56px 0 120px;}
-.dash-hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-  background-size:44px 44px;
-  -webkit-mask-image:radial-gradient(ellipse 85% 70% at 50% 0%, black 30%, transparent 80%);
-  mask-image:radial-gradient(ellipse 85% 70% at 50% 0%, black 30%, transparent 80%);
-  pointer-events:none;
-}
-.dash-hero .wrap{position:relative;z-index:2;}
-.dash-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.dash-head h1{
-  font-family:var(--display);font-weight:700;color:#fff;
-  font-size:clamp(26px,3.6vw,38px);letter-spacing:-0.018em;line-height:1.1;
-}
-.dash-head .who{margin-top:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted-soft);word-break:break-all;}
-.dash-actions{display:flex;gap:12px;align-items:center;}
-
-.dash-stats{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
-  max-width:none;margin:-72px auto 0;position:relative;z-index:5;
-}
-@media (max-width:780px){ .dash-stats{grid-template-columns:repeat(2,1fr);} }
-.dash-stat{
-  background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;
-  box-shadow:var(--shadow-card);
-}
-.dash-stat b{display:block;font-family:var(--display);font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;}
-.dash-stat span{font-family:var(--mono);font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted-soft);}
-.dash-stat.hot b{color:var(--red);}
-.dash-stat.warm b{color:var(--blue-deep);}
-.dash-stat.value b{color:var(--green);}
-
-.dash-section{padding:56px 0 96px;}
-.dash-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px;}
-.dash-toolbar .ttl{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-soft);}
-.dash-filter{display:flex;gap:8px;flex-wrap:wrap;}
-.dash-filter button{
-  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
-  padding:8px 14px;border-radius:100px;border:1.5px solid var(--line);color:var(--muted);
-  transition:border-color .2s, color .2s, background .2s;
-}
-.dash-filter button:hover{border-color:var(--slate-soft);color:var(--ink);}
-.dash-filter button.on{background:var(--ink);border-color:var(--ink);color:#fff;}
-
-/* Sort control — pill-shaped to sit with the filter buttons. */
-.dash-sort{
-  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
-  padding:8px 30px 8px 14px;border-radius:100px;
-  border:1.5px solid var(--line);background:#fff;color:var(--muted);
-  cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235B6B80' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;background-size:9px;
-  transition:border-color .2s, color .2s;
-}
-.dash-sort:hover{border-color:var(--slate-soft);color:var(--ink);}
-.dash-sort:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
-
-.lead-card{
-  background:#fff;border:1px solid var(--line);border-radius:16px;
-  padding:22px 24px;margin-bottom:14px;
-  transition:box-shadow .3s var(--ease), border-color .3s, transform .3s var(--ease);
-}
-.lead-card:hover{box-shadow:var(--shadow-card);transform:translateY(-2px);}
-.lead-card.is-hot{border-left:3px solid var(--red);}
-.lead-card.is-warm{border-left:3px solid var(--blue);}
-.lead-card.is-cold{border-left:3px solid var(--line);}
-.lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
-.lead-top h3{font-family:var(--display);font-size:17.5px;font-weight:700;color:var(--ink);}
-.lead-when{display:block;margin-top:5px;font-family:var(--mono);font-size:11.5px;color:var(--muted-soft);}
-.lead-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.pri-badge{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.07em;
-  padding:5px 11px;border-radius:100px;
-}
-.pri-hot{background:rgba(214,69,69,0.12);color:var(--red);}
-.pri-warm{background:rgba(46,124,246,0.13);color:var(--blue-deep);}
-.pri-cold{background:rgba(11,15,23,0.07);color:var(--slate);}
-.score-badge{
-  font-family:var(--mono);font-size:12px;font-weight:600;
-  padding:5px 11px;border-radius:7px;background:var(--mist);color:var(--slate);
-  border:1px solid var(--line-soft);
-}
-.status-chip{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
-  padding:5px 11px;border-radius:7px;background:rgba(34,176,133,0.11);color:var(--green);
-}
-.status-chip.st-new{background:rgba(46,124,246,0.13);color:var(--blue-deep);}
-.status-chip.st-contacted{background:rgba(11,15,23,0.07);color:var(--slate);}
-.status-chip.st-won{background:rgba(34,176,133,0.11);color:var(--green);}
-.status-chip.st-lost{background:rgba(214,69,69,0.12);color:var(--red);}
-
-/* Status control — the dashboard's only write action. */
-.status-set{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.04em;
-  padding:5px 26px 5px 10px;border-radius:7px;
-  border:1.5px solid var(--line);background:#fff;color:var(--slate);
-  cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%235B6B80' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 9px center;background-size:9px;
-  transition:border-color .2s, color .2s, opacity .2s;
-}
-.status-set:hover{border-color:var(--slate-soft);color:var(--ink);}
-.status-set:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
-.status-set[disabled]{opacity:.55;cursor:progress;}
-.status-note{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.04em;
-  color:var(--red);
-}
-.status-note[hidden]{display:none !important;}
-
-/* Archive control */
-.arch-btn{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
-  padding:5px 11px;border-radius:7px;
-  border:1.5px solid var(--line);background:#fff;color:var(--muted-soft);
-  transition:border-color .2s, color .2s, opacity .2s;
-}
-.arch-btn:hover{border-color:var(--slate-soft);color:var(--ink);}
-.arch-btn:focus-visible{outline:2px solid var(--blue);outline-offset:1px;}
-.arch-btn[disabled]{opacity:.55;cursor:progress;}
-.lead-card.is-archived{background:var(--mist);opacity:.82;}
-.lead-card.is-archived .lead-top h3{color:var(--muted);}
-.arch-tag{
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.05em;
-  padding:5px 11px;border-radius:7px;background:rgba(11,15,23,0.07);color:var(--muted-soft);
-}
-.arch-toggle{
-  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;
-  color:var(--muted);border-bottom:1.5px solid var(--line);padding-bottom:2px;
-  transition:color .2s, border-color .2s;
-}
-.arch-toggle:hover{color:var(--ink);border-color:var(--slate-soft);}
-.arch-toggle.on{color:var(--blue-deep);border-color:var(--blue);}
-.dash-toolbar .tools{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-.lead-meta{
-  display:flex;gap:22px;flex-wrap:wrap;margin-top:12px;
-  font-size:13.5px;color:var(--muted);
-}
-.lead-meta a{color:var(--blue-deep);font-weight:600;}
-.lead-meta a:hover{text-decoration:underline;text-underline-offset:3px;}
-.lead-meta .ev{font-weight:700;color:var(--ink);}
-.lead-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--line-soft);}
-.lead-body .row{display:flex;gap:10px;margin-bottom:8px;font-size:14px;line-height:1.6;}
-.lead-body .row:last-child{margin-bottom:0;}
-.lead-body .k{
-  flex-shrink:0;width:118px;font-family:var(--mono);font-size:11px;font-weight:600;
-  letter-spacing:0.05em;text-transform:uppercase;color:var(--muted-soft);padding-top:3px;
-}
-.lead-body .v{color:var(--slate);}
-.lead-body .v.action{font-weight:600;color:var(--blue-deep);}
-@media (max-width:560px){
-  .lead-card{padding:18px;}
-  .lead-body .row{flex-direction:column;gap:2px;}
-  .lead-body .k{width:auto;}
-  .lead-meta{gap:10px 18px;}
-}
-
-.dash-state{
-  text-align:center;padding:64px 20px;color:var(--muted);
-  font-size:15px;line-height:1.7;
-}
-.dash-state .spin{
-  width:34px;height:34px;margin:0 auto 18px;border-radius:50%;
-  border:3px solid var(--line);border-top-color:var(--blue);
-  animation:dashSpin .8s linear infinite;
-}
-@keyframes dashSpin{to{transform:rotate(360deg);}}
-</style>
+<link rel="stylesheet" href="assets/dashboard.css">
 </head>
 <body>
 
-<!-- ============ NAV (minimal, app context) ============ -->
-<nav class="nav">
-  <div class="wrap nav-inner">
-    <a href="index.html" class="brand">
-      <span class="brand-mark"><img src="assets/logo.png" alt=""></span>
-      LeadIntel CRM
-    </a>
-    <div class="nav-cta">
-      <button class="btn btn-outline-light btn-sm" id="logoutBtn">Sign out</button>
-    </div>
-  </div>
-</nav>
+<a class="sr-only" href="#leads">Skip to lead queue</a>
 
-<!-- ============ DASH HERO ============ -->
-<header class="dash-hero">
-  <div class="hero-glow"></div>
-  <div class="wrap">
-    <div class="dash-head">
-      <div>
-        <div class="eyebrow enter" style="--enter-delay:0s;color:var(--blue-bright);"><span class="dot"></span> LIVE LEAD QUEUE</div>
-        <h1 class="enter" style="--enter-delay:.08s;margin-top:14px;">Your leads, ranked.</h1>
-        <div class="who enter" id="whoAmI" style="--enter-delay:.16s;"></div>
-      </div>
+<header class="site-header app-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="index.html" aria-label="LeadIntel CRM home">
+      <img class="logo-mark" src="assets/logo-mark-128.png" width="34" height="34" alt="" aria-hidden="true" decoding="async">
+      <span class="logo-word">LeadIntel</span>
+    </a>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" type="button" data-signout>Sign out</button>
     </div>
   </div>
 </header>
 
-<!-- ============ STATS + LEADS ============ -->
-<section class="dash-section" style="padding-top:0;">
-  <div class="wrap">
-    <div class="dash-stats" id="dashStats" hidden>
-      <div class="dash-stat hot"><b id="stHot">0</b><span>Hot leads</span></div>
-      <div class="dash-stat warm"><b id="stWarm">0</b><span>Warm leads</span></div>
-      <div class="dash-stat"><b id="stTotal">0</b><span>Total leads</span></div>
-      <div class="dash-stat value"><b id="stValue">$0</b><span>Est. pipeline</span></div>
-    </div>
+<main>
 
-    <div class="dash-toolbar" id="dashToolbar" hidden style="margin-top:40px;">
-      <div class="tools">
-        <select class="dash-sort" id="dashSort" aria-label="Sort leads">
-          <option value="priority">Priority, then score</option>
-          <option value="created">Newest first</option>
-          <option value="score">Highest score first</option>
-        </select>
-        <button class="arch-toggle" id="archToggle" aria-pressed="false">Show archived</button>
-      </div>
-      <div class="dash-filter" id="dashFilter">
-        <button data-f="ALL" class="on">ALL</button>
-        <button data-f="HOT">HOT</button>
-        <button data-f="WARM">WARM</button>
-        <button data-f="COLD">COLD</button>
-      </div>
-    </div>
-
-    <div id="leadList"></div>
-
-    <div class="dash-state" id="dashLoading">
-      <div class="spin"></div>
-      Loading your leads…
-    </div>
-    <div class="dash-state" id="dashEmpty" hidden>
-      No leads in your queue yet. New leads will show up here automatically, scored and ranked.
-    </div>
-    <div class="dash-state" id="dashError" hidden>
-      We couldn't load your leads right now. <br>
-      <button class="btn btn-outline btn-sm" style="margin-top:16px;" onclick="window.location.reload()">Try again</button>
-    </div>
+  <div class="wrap dash-head">
+    <p class="eyebrow"><span class="dot"></span>Live lead queue</p>
+    <h1 class="h-lg">Your leads, ranked.</h1>
+    <p class="account" data-account>—</p>
   </div>
-</section>
 
-<!-- ============ FOOTER (slim) ============ -->
-<footer>
   <div class="wrap">
-    <div class="foot-bottom" style="padding-top:0;">
-      <span>© 2026 LeadIntel CRM. All rights reserved.</span>
-      <span><a href="privacy.html" style="color:var(--dark-text);">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:var(--dark-text);">Terms</a></span>
+    <div class="dash-stats">
+      <div class="dash-stat">
+        <div class="value" data-stat="hot">0</div>
+        <div class="label">Hot leads</div>
+      </div>
+      <div class="dash-stat">
+        <div class="value" data-stat="warm">0</div>
+        <div class="label">Warm leads</div>
+      </div>
+      <div class="dash-stat">
+        <div class="value" data-stat="total">0</div>
+        <div class="label">Total leads</div>
+      </div>
+      <div class="dash-stat">
+        <div class="value" data-stat="pipeline">$0</div>
+        <div class="label">Est. pipeline</div>
+      </div>
     </div>
+
+    <div class="toolbar">
+      <label class="sr-only" for="sort">Sort leads</label>
+      <select class="select" id="sort" data-sort>
+        <option value="priority">Priority, then score</option>
+        <option value="score">Highest score first</option>
+        <option value="created">Newest first</option>
+        <option value="value">Estimated value</option>
+      </select>
+
+      <button class="toggle-archived" type="button" data-archived-toggle aria-pressed="false">
+        <span class="box" aria-hidden="true"></span>Show archived
+      </button>
+
+      <div class="filters" role="group" aria-label="Filter by priority">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-filter="hot" aria-pressed="false">Hot</button>
+        <button class="chip" type="button" data-filter="warm" aria-pressed="false">Warm</button>
+        <button class="chip" type="button" data-filter="cold" aria-pressed="false">Cold</button>
+      </div>
+    </div>
+
+    <p class="result-count" role="status" data-count>Loading your leads…</p>
+
+    <div class="lead-list" id="leads" data-list></div>
   </div>
-</footer>
 
-<script>
-(function () {
-  'use strict';
+</main>
 
-  var PRIORITY_ORDER = { HOT: 0, WARM: 1, COLD: 2 };
-  // Mirrors the server's allowed list; the server is the authority either way.
-  var STATUSES = ['New', 'Contacted', 'Won', 'Lost'];
-  var allLeads = [];
-  var filter = 'ALL';
-  var sortBy = 'priority';
-  var showArchived = false;
-
-  var $ = function (id) { return document.getElementById(id); };
-
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-  function money(n) {
-    if (n == null) return null;
-    return '$' + Math.round(n).toLocaleString('en-US');
-  }
-  function priClass(p) {
-    return p === 'HOT' ? 'hot' : p === 'WARM' ? 'warm' : 'cold';
-  }
-  // Canonical status match, or '' when the stored value isn't one of the four.
-  function canonStatus(s) {
-    var needle = String(s || '').trim().toLowerCase();
-    for (var i = 0; i < STATUSES.length; i++) {
-      if (STATUSES[i].toLowerCase() === needle) return STATUSES[i];
-    }
-    return '';
-  }
-  function statusChip(l) {
-    var canon = canonStatus(l.status);
-    if (!l.status) return '';
-    var cls = canon ? ' st-' + canon.toLowerCase() : '';
-    return '<span class="status-chip' + cls + '" data-role="chip">' + esc(l.status) + '</span>';
-  }
-  function statusSelect(l) {
-    var canon = canonStatus(l.status);
-    var opts = STATUSES.map(function (s) {
-      return '<option value="' + s + '"' + (s === canon ? ' selected' : '') + '>' + s + '</option>';
-    });
-    // Leads with no status (or an unrecognized one) start on a placeholder so
-    // nothing is silently mislabeled before the contractor picks a value.
-    if (!canon) {
-      opts.unshift('<option value="" disabled selected>' + (l.status ? 'Set status…' : '— Set status —') + '</option>');
-    }
-    return (
-      '<select class="status-set" data-role="status" aria-label="Update status for ' +
-      esc(l.name || 'this lead') + '">' + opts.join('') + '</select>'
-    );
-  }
-  // Parse an Estimated Value into a numeric contribution for the pipeline
-  // total. Handles ranges ("$10,000–$12,000" -> average of low & high) and
-  // single values ("$8,500" -> 8500). Returns 0 when no number is present.
-  function estValueNumber(raw) {
-    if (raw == null || raw === '') return 0;
-    if (typeof raw === 'number') return isFinite(raw) ? raw : 0;
-    var tokens = String(raw).match(/\d[\d,]*(?:\.\d+)?/g);
-    if (!tokens) return 0;
-    var nums = tokens
-      .map(function (t) { return parseFloat(t.replace(/,/g, '')); })
-      .filter(function (n) { return isFinite(n); });
-    if (!nums.length) return 0;
-    if (nums.length === 1) return nums[0];
-    return (Math.min.apply(null, nums) + Math.max.apply(null, nums)) / 2;
-  }
-
-  // Fills the Project block: one line per " • " segment, and for segments
-  // shaped "Label: value" the label is bolded. createElement/textContent only —
-  // this text is visitor-supplied and must never be parsed as markup.
-  function fillDetails(el, details) {
-    var segments = String(details || '').split(' • ');
-    var written = 0;
-    segments.forEach(function (segment) {
-      var text = segment.trim();
-      if (!text) return;
-      if (written) el.appendChild(document.createElement('br'));
-      written++;
-      var split = text.indexOf(': ');
-      if (split === -1) {
-        el.appendChild(document.createTextNode(text));
-        return;
-      }
-      var label = document.createElement('strong');
-      label.textContent = text.slice(0, split);
-      el.appendChild(label);
-      // Keeps the ": " separator with the value, unbolded.
-      el.appendChild(document.createTextNode(text.slice(split)));
-    });
-  }
-
-  // Created is whatever Airtable stored; anything unparseable is treated the
-  // same as a missing value so old records never break the list.
-  function createdTime(raw) {
-    if (!raw) return null;
-    var t = new Date(raw).getTime();
-    return isFinite(t) ? t : null;
-  }
-  // "Aug 11, 6:42 AM" in the viewer's own timezone.
-  function formatCreated(raw) {
-    var t = createdTime(raw);
-    if (t == null) return '';
-    return new Date(t).toLocaleString('en-US', {
-      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
-    });
-  }
-
-  var SORTS = {
-    priority: function (a, b) {
-      var pa = PRIORITY_ORDER[a.priority] != null ? PRIORITY_ORDER[a.priority] : 3;
-      var pb = PRIORITY_ORDER[b.priority] != null ? PRIORITY_ORDER[b.priority] : 3;
-      if (pa !== pb) return pa - pb;
-      return (b.score || 0) - (a.score || 0);
-    },
-    // Undated leads sink to the bottom rather than leading the list.
-    created: function (a, b) {
-      var ta = createdTime(a.created);
-      var tb = createdTime(b.created);
-      if (ta == null && tb == null) return SORTS.priority(a, b);
-      if (ta == null) return 1;
-      if (tb == null) return -1;
-      return tb - ta;
-    },
-    score: function (a, b) {
-      var d = (b.score || 0) - (a.score || 0);
-      return d !== 0 ? d : SORTS.priority(a, b);
-    }
-  };
-
-  // Archived leads are out of the working queue: hidden unless asked for, and
-  // never counted in the stats above.
-  function activeLeads() {
-    return allLeads.filter(function (l) { return !l.archived; });
-  }
-  function archivedCount() {
-    return allLeads.length - activeLeads().length;
-  }
-
-  function updateStats() {
-    var active = activeLeads();
-    var hot = active.filter(function (l) { return l.priority === 'HOT'; }).length;
-    var warm = active.filter(function (l) { return l.priority === 'WARM'; }).length;
-    var value = active.reduce(function (s, l) { return s + estValueNumber(l.estimatedValue); }, 0);
-    $('stHot').textContent = hot;
-    $('stWarm').textContent = warm;
-    $('stTotal').textContent = active.length;
-    $('stValue').textContent = money(value) || '$0';
-  }
-
-  function updateArchToggle() {
-    var n = archivedCount();
-    var btn = $('archToggle');
-    btn.textContent = showArchived
-      ? 'Hide archived' + (n ? ' (' + n + ')' : '')
-      : 'Show archived' + (n ? ' (' + n + ')' : '');
-    btn.classList.toggle('on', showArchived);
-    btn.setAttribute('aria-pressed', showArchived ? 'true' : 'false');
-  }
-
-  function render() {
-    var list = $('leadList');
-    var pool = showArchived ? allLeads : activeLeads();
-    var leads = filter === 'ALL' ? pool : pool.filter(function (l) { return l.priority === filter; });
-    // Sort and filter are independent: both are applied fresh on every render.
-    leads = leads.slice().sort(SORTS[sortBy] || SORTS.priority);
-    if (!leads.length) {
-      list.innerHTML = '';
-      $('dashEmpty').hidden = false;
-      $('dashEmpty').textContent = allLeads.length
-        ? (filter === 'ALL'
-            ? 'No active leads right now.' + (archivedCount() ? ' You have ' + archivedCount() + ' archived.' : '')
-            : 'No ' + filter.toLowerCase() + ' leads right now.')
-        : 'No leads in your queue yet. New leads will show up here automatically, scored and ranked.';
-      return;
-    }
-    $('dashEmpty').hidden = true;
-    list.innerHTML = leads.map(function (l) {
-      var pc = priClass(l.priority);
-      var meta = [];
-      if (l.phone) meta.push('<span>📞 <a href="tel:' + esc(l.phone).replace(/[^0-9+]/g, '') + '">' + esc(l.phone) + '</a></span>');
-      if (l.email) meta.push('<span>✉️ <a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a></span>');
-      if (l.estimatedValue) meta.push('<span class="ev">Est. ' + esc(l.estimatedValue) + '</span>');
-      var rows = [];
-      if (l.recommendedAction) rows.push('<div class="row"><span class="k">Next step</span><span class="v action">' + esc(l.recommendedAction) + '</span></div>');
-      // Left empty on purpose — fillDetails() populates it with real nodes.
-      if (l.details) rows.push('<div class="row"><span class="k">Project</span><span class="v" data-role="details"></span></div>');
-      var when = formatCreated(l.created);
-      return (
-        '<div class="lead-card is-' + pc + (l.archived ? ' is-archived' : '') + '" data-id="' + esc(l.id) + '">' +
-          '<div class="lead-top">' +
-            '<div>' +
-              '<h3>' + esc(l.name || 'Unnamed lead') + '</h3>' +
-              (when ? '<span class="lead-when">' + esc(when) + '</span>' : '') +
-            '</div>' +
-            '<div class="lead-badges">' +
-              (l.archived ? '<span class="arch-tag">ARCHIVED</span>' : '') +
-              (l.priority ? '<span class="pri-badge pri-' + pc + '">' + esc(l.priority) + '</span>' : '') +
-              (l.score != null ? '<span class="score-badge">' + esc(l.score) + ' / 100</span>' : '') +
-              statusChip(l) +
-              statusSelect(l) +
-              '<button class="arch-btn" data-role="archive" data-next="' + (l.archived ? 'false' : 'true') + '">' +
-                (l.archived ? 'Unarchive' : 'Archive') +
-              '</button>' +
-              '<span class="status-note" data-role="note" hidden></span>' +
-            '</div>' +
-          '</div>' +
-          (meta.length ? '<div class="lead-meta">' + meta.join('') + '</div>' : '') +
-          (rows.length ? '<div class="lead-body">' + rows.join('') + '</div>' : '') +
-        '</div>'
-      );
-    }).join('');
-
-    // Details is free text a website visitor typed, so it is never handed to
-    // the HTML parser — each card's Project block is built from real nodes.
-    list.querySelectorAll('.lead-card').forEach(function (card) {
-      var target = card.querySelector('[data-role="details"]');
-      if (!target) return;
-      var lead = leads.filter(function (l) { return l.id === card.dataset.id; })[0];
-      if (lead) fillDetails(target, lead.details);
-    });
-  }
-
-  fetch('/api/leads', { credentials: 'same-origin' })
-    .then(function (res) {
-      if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
-      if (!res.ok) throw new Error('failed');
-      return res.json();
-    })
-    .then(function (data) {
-      $('dashLoading').hidden = true;
-      $('whoAmI').textContent = data.email || '';
-      // Order is decided at render time by the active sort.
-      allLeads = (data.leads || []).slice();
-
-      updateStats();
-      updateArchToggle();
-      $('dashStats').hidden = false;
-      $('dashToolbar').hidden = false;
-      render();
-    })
-    .catch(function (err) {
-      if (err.message === 'unauthenticated') return;
-      $('dashLoading').hidden = true;
-      $('dashError').hidden = false;
-    });
-
-  $('dashFilter').addEventListener('click', function (e) {
-    var btn = e.target.closest('button[data-f]');
-    if (!btn) return;
-    filter = btn.dataset.f;
-    this.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b === btn); });
-    render();
-  });
-
-  // Browsers restore a select's value across reloads; the default is priority.
-  $('dashSort').value = sortBy;
-  // Sort is independent of the filter and the archived toggle — only re-render.
-  $('dashSort').addEventListener('change', function () {
-    sortBy = this.value;
-    render();
-  });
-
-  // ---- Status updates (the one write path on this page) ----
-  $('leadList').addEventListener('change', function (e) {
-    var sel = e.target.closest('select[data-role="status"]');
-    if (!sel) return;
-    var card = sel.closest('.lead-card');
-    if (!card) return;
-
-    var id = card.dataset.id;
-    var next = sel.value;
-    var lead = allLeads.filter(function (l) { return l.id === id; })[0];
-    var previous = lead ? lead.status : '';
-    var note = card.querySelector('[data-role="note"]');
-
-    note.hidden = true;
-    sel.disabled = true;
-
-    fetch('/api/leads/update-status', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: id, status: next })
-    })
-      .then(function (res) {
-        if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
-        return res.json().then(function (data) {
-          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not save');
-          return data;
-        });
-      })
-      .then(function (data) {
-        // Trust the server's canonical value, not the option text.
-        if (lead) lead.status = data.status;
-        paintStatus(card, data.status);
-        sel.disabled = false;
-      })
-      .catch(function (err) {
-        if (err.message === 'unauthenticated') return;
-        sel.disabled = false;
-        sel.value = canonStatus(previous);
-        note.textContent = err.message;
-        note.hidden = false;
-      });
-  });
-
-  // ---- Archive / unarchive ----
-  $('leadList').addEventListener('click', function (e) {
-    var btn = e.target.closest('button[data-role="archive"]');
-    if (!btn) return;
-    var card = btn.closest('.lead-card');
-    if (!card) return;
-
-    var id = card.dataset.id;
-    var next = btn.dataset.next === 'true';
-    var lead = allLeads.filter(function (l) { return l.id === id; })[0];
-    var note = card.querySelector('[data-role="note"]');
-
-    note.hidden = true;
-    btn.disabled = true;
-
-    fetch('/api/leads/archive', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: id, archived: next })
-    })
-      .then(function (res) {
-        if (res.status === 401) { window.location.href = '/login'; throw new Error('unauthenticated'); }
-        return res.json().then(function (data) {
-          if (!res.ok || !data.ok) throw new Error(data.error || 'Could not save');
-          return data;
-        });
-      })
-      .then(function (data) {
-        if (lead) lead.archived = data.archived;
-        // Archiving pulls the card out of the default view, so re-render
-        // rather than patching this card in place.
-        updateStats();
-        updateArchToggle();
-        render();
-      })
-      .catch(function (err) {
-        if (err.message === 'unauthenticated') return;
-        btn.disabled = false;
-        note.textContent = err.message;
-        note.hidden = false;
-      });
-  });
-
-  $('archToggle').addEventListener('click', function () {
-    showArchived = !showArchived;
-    updateArchToggle();
-    render();
-  });
-
-  // Repaints the badge in place — no reload, no refetch.
-  function paintStatus(card, status) {
-    var chip = card.querySelector('[data-role="chip"]');
-    if (!chip) {
-      chip = document.createElement('span');
-      chip.className = 'status-chip';
-      chip.setAttribute('data-role', 'chip');
-      card.querySelector('.lead-badges').insertBefore(
-        chip, card.querySelector('select[data-role="status"]')
-      );
-    }
-    chip.textContent = status;
-    chip.className = 'status-chip st-' + status.toLowerCase();
-    // Drop the placeholder once a real value is set.
-    var placeholder = card.querySelector('select[data-role="status"] option[value=""]');
-    if (placeholder) placeholder.remove();
-  }
-
-  $('logoutBtn').addEventListener('click', function () {
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
-      .finally(function () { window.location.href = '/login'; });
-  });
-})();
-</script>
+<script src="assets/dashboard.js"></script>
 </body>
 </html>
