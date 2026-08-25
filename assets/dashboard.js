@@ -235,7 +235,8 @@
 
   el.chips.forEach(function (chip) {
     chip.addEventListener('click', function () {
-      state.filter = chip.getAttribute('data-filter');
+      /* chips carry lowercase values; every comparison downstream is uppercase */
+      state.filter = chip.getAttribute('data-filter').toUpperCase();
       el.chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
       render();
     });
