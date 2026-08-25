@@ -12,6 +12,11 @@
   --smoke: #979797;
   --paper: #ffffff;
 
+  /* dashboard lead-priority pills */
+  --priority-hot: #ff0000;
+  --priority-warm: #ffa53d;
+  --priority-cold: #5aa9f0;
+
   --edge: rgba(255, 255, 255, 0.12);
   --edge-soft: rgba(255, 255, 255, 0.07);
   --inset: inset 0 0 0 1px var(--edge);
