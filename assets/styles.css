@@ -12,7 +12,7 @@
   --smoke: #979797;
   --paper: #ffffff;
 
-  /* dashboard lead-priority pills */
+  /* lead-priority pills */
   --priority-hot: #ff0000;
   --priority-warm: #ffa53d;
   --priority-cold: #5aa9f0;
@@ -305,9 +305,11 @@ section { padding: var(--section-gap) 0; }
   white-space: nowrap;
   flex: none;
 }
-.pill-hot { background: var(--signal-blue); color: var(--paper); }
-.pill-warm { background: var(--steel); color: var(--paper); }
-.pill-cold { background: var(--graphite); color: var(--ash); box-shadow: var(--inset); }
+/* Priority by hue. Text is obsidian, not paper: at 12px white fails WCAG AA
+   on all three (4.00 / 1.96 / 2.51); obsidian passes (4.99 / 10.18 / 7.96). */
+.pill-hot { background: var(--priority-hot); color: var(--obsidian); }
+.pill-warm { background: var(--priority-warm); color: var(--obsidian); }
+.pill-cold { background: var(--priority-cold); color: var(--obsidian); }
 .pill-scoring { background: var(--iron); color: var(--smoke); }
 
 .panel-foot {

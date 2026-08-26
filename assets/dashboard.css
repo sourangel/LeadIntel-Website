@@ -165,13 +165,6 @@
 .lead-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .lead-controls .pill { text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* Priority by hue on the dashboard. Dark text is not a style choice: white
-   fails AA at this 12px size on all three (4.00 / 1.96 / 2.51), obsidian
-   passes on all three (4.99 / 10.18 / 7.96). */
-.lead-controls .pill-hot  { background: var(--priority-hot);  color: var(--obsidian); }
-.lead-controls .pill-warm { background: var(--priority-warm); color: var(--obsidian); }
-.lead-controls .pill-cold { background: var(--priority-cold); color: var(--obsidian); box-shadow: none; }
-
 .score {
   font-family: var(--font-mono);
   font-size: 13px;
