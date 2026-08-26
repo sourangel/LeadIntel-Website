@@ -5,9 +5,10 @@
 **Theme:** dark (dark only — there is no light mode in this system)
 
 A pitch-black canvas hosting dense product interfaces that glow from within. Nearly
-monochromatic — no semantic color clutter, no decorative gradients — letting one
-electric blue do all the emotional heavy lifting on CTAs, active states, and brand
-punctuation. Components sit on the canvas like instrument panels: dark, lightly
+monochromatic — no decorative gradients — letting one electric blue do the emotional
+heavy lifting on CTAs, active states, and brand punctuation. The single exception is
+lead priority, which is colour-coded by hue (see below); every other use of colour
+in the system remains the one blue. Components sit on the canvas like instrument panels: dark, lightly
 elevated by near-invisible inset white borders rather than drop shadows, with
 pill-shaped interactive elements that feel like physical switches.
 
@@ -15,7 +16,7 @@ pill-shaped interactive elements that feel like physical switches.
 
 | Name | Value | Token | Role |
 |------|-------|-------|------|
-| Signal Blue | `#0063e1` | `--color-signal-blue` | Primary CTA fill, active nav indicator, brand accent dots, link highlights — the single chromatic voice |
+| Signal Blue | `#0063e1` | `--color-signal-blue` | Primary CTA fill, active nav indicator, brand accent dots, link highlights — the chromatic voice everywhere except lead priority |
 | Obsidian | `#040910` | `--color-obsidian` | Page canvas, dominant background, hairline dividers, icon fill — the floor of the system |
 | Carbon | `#0d0d0d` | `--color-carbon` | Alias of Graphite — every box surface is one flat grey |
 | Graphite | `#0d0d0d` | `--color-graphite` | Elevated card surfaces, section backgrounds, border fills — mid-surface layer |
@@ -25,6 +26,9 @@ pill-shaped interactive elements that feel like physical switches.
 | Fog | `#8c8c8c` | `--color-fog` | Link text, subdued navigation labels |
 | Smoke | `#979797` | `--color-smoke` | Icon strokes, tertiary button borders, low-priority text |
 | Paper | `#ffffff` | `--color-paper` | Headings, at-a-glance text, light neutral action fill on dark surfaces |
+| Priority Hot | `#ff0000` | `--priority-hot` | HOT lead pill fill — lead priority only, never elsewhere |
+| Priority Warm | `#ffa53d` | `--priority-warm` | WARM lead pill fill — lead priority only, never elsewhere |
+| Priority Cold | `#5aa9f0` | `--priority-cold` | COLD lead pill fill — lead priority only, never elsewhere |
 
 Surface stack, in order: Obsidian -> Carbon -> Graphite -> Iron -> Steel.
 Maintain clear luminance steps between levels.
@@ -122,19 +126,34 @@ Title 20-24px, body 16px Ash.
 White text, Ash placeholder.
 
 **Status pill / tag** — small pill, dark background, white or muted text, mono 12-13px.
+Lead-priority pills are the exception: see the adaptation section below.
 
 ## LeadIntel adaptation — lead priority states
 
-REKKI's rule is one chromatic accent, full stop. LeadIntel needs HOT / WARM / COLD
-to be readable at a glance. Resolve this WITHOUT introducing red and green:
+REKKI's rule is one chromatic accent, full stop. This system deliberately breaks that
+rule in exactly one place: lead priority is encoded by hue, because a contractor
+scanning a queue needs HOT / WARM / COLD separable at a glance.
 
-- HOT — Signal Blue `#0063e1` pill, white text. Blue is scarce, so it reads as urgent.
-- WARM — Steel `#2b2c2e` pill, Paper `#ffffff` text.
-- COLD — Graphite `#0d0d0d` pill, Ash `#858585` text.
+- HOT — `#ff0000` pill, Obsidian `#040910` text.
+- WARM — `#ffa53d` pill, Obsidian `#040910` text.
+- COLD — `#5aa9f0` pill, Obsidian `#040910` text.
 - Below minimum / out of area — same COLD pill plus a mono caption in Ash.
 
-Priority is encoded as luminance and blue-scarcity, not hue. This keeps the system
-monochromatic and stays legible for colorblind users.
+The text is Obsidian, not Paper, and that is not a style preference. At the pill's
+12px size white text fails WCAG AA on all three fills (4.00:1 / 1.96:1 / 2.51:1
+against the 4.5:1 minimum). Obsidian passes on all three (4.99:1 / 10.18:1 / 7.96:1).
+Do not switch these to white text.
+
+Colourblind legibility is carried by the pill's text label, not the hue — every pill
+spells out HOT, WARM, or COLD, so red-vs-orange confusion does not cost the reader
+the meaning. Never encode priority by colour alone.
+
+This is the only place a second hue is permitted. These three tokens are for lead
+priority pills and nothing else — not charts, not status, not alerts, not borders.
+
+**Superseded:** priority was previously encoded by luminance and blue-scarcity
+(HOT Signal Blue, WARM Steel, COLD Graphite). Changed 2026-08-23 at Daniel's
+direction. Do not "restore" the old monochrome pills.
 
 ## Do
 
@@ -148,7 +167,8 @@ monochromatic and stays legible for colorblind users.
 
 ## Don't
 
-- Never introduce a second chromatic accent — no green, no red, no purple
+- Never introduce a second chromatic accent beyond the three lead-priority pill
+  tokens — no green, no purple, and no red outside a HOT pill
 - Never apply drop shadows to cards or panels
 - Never set body text dimmer than `#858585` against the black canvas
 - Never use bold (700) for headlines — it destroys the signature

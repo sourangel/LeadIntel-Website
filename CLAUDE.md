@@ -10,13 +10,13 @@ Ten static pages, no build step, no framework. Plain HTML + one stylesheet.
 
 `DESIGN.md` is the authoritative design system and it is strict. Read it before
 changing any visual. It is adapted from the REKKI system with two deliberate
-divergences (font substitutions, and lead priority encoded by luminance instead
-of a second accent colour). Do not "improve" toward conventional SaaS defaults —
+divergences (font substitutions, and lead priority colour-coded by hue). Do not "improve" toward conventional SaaS defaults —
 bold headlines, drop shadows, and semantic red/green are all explicitly wrong here.
 
 Key rules that get broken by accident:
 - One chromatic accent only. `#0063e1` is for the single primary CTA per viewport,
-  active nav, brand dots, and lead priority. Never decorative.
+  active nav and brand dots. Never decorative. The sole exception is the three
+  lead-priority pill colours (hot/warm/cold), which are for those pills alone.
 - Headlines are weight 400. Authority comes from size and negative tracking.
 - Elevation is the 12% inset white border. There are no drop shadows.
 - Every colour comes from a token in `:root`. No hardcoded hex in components.
