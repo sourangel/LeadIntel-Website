@@ -88,16 +88,29 @@
     return '';
   }
 
-  /* details is one string: "Project type: New Pour • Project area: Driveway • …" */
-  function specRows(details) {
-    return String(details || '').split(' • ').map(function (seg) {
+  /* details is one string: "Project type: New Pour • Project area: Driveway • …"
+     "Special requests" is pulled out of the grid — it can carry a long
+     AI-generated call summary, so it renders as its own clamped
+     full-width row instead of stretching the four-column spec. */
+  function parseDetails(details) {
+    var rows = '';
+    var special = '';
+    String(details || '').split(' • ').forEach(function (seg) {
       var text = seg.trim();
-      if (!text) return '';
+      if (!text) return;
       var split = text.indexOf(': ');
-      if (split === -1) return '<div><dd>' + esc(text) + '</dd></div>';
-      return '<div><dt>' + esc(text.slice(0, split)) + '</dt><dd>' +
-        esc(text.slice(split + 2)) + '</dd></div>';
-    }).join('');
+      if (split === -1) { rows += '<div><dd>' + esc(text) + '</dd></div>'; return; }
+      var label = text.slice(0, split);
+      var value = text.slice(split + 2);
+      if (label.trim().toLowerCase() === 'special requests') {
+        if (!special) special = value.trim();
+        return;
+      }
+      rows += '<div><dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd></div>';
+    });
+    /* empty, "None", or whitespace hides the row entirely */
+    if (/^none$/i.test(special)) special = '';
+    return { rows: rows, special: special };
   }
 
   function visible() {
@@ -163,11 +176,14 @@
 
   function cardHTML(l) {
     var pri = priorityKey(l.priority);
+    var d = parseDetails(l.details);
+    var missedCall = /^received via missed call/i.test(d.special);
     return '' +
       '<article class="lead-card" data-priority="' + esc(pri.toLowerCase()) + '" data-archived="' + (l.archived ? 'true' : 'false') + '" data-id="' + esc(l.id) + '">' +
         '<div class="lead-top">' +
           '<div class="lead-id">' +
-            '<div class="lead-name">' + esc(l.name || 'Unnamed lead') + '</div>' +
+            '<div class="lead-name">' + esc(l.name || 'Unnamed lead') +
+              (missedCall ? ' <span class="badge-missed">Missed Call</span>' : '') + '</div>' +
             '<div class="lead-date">' + esc(formatDate(l.created)) + '</div>' +
           '</div>' +
           '<div class="lead-controls">' +
@@ -183,10 +199,16 @@
           (l.email ? '<a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a>' : '') +
           (l.estimatedValue ? '<span class="lead-value">Est. ' + esc(l.estimatedValue) + '</span>' : '') +
         '</div>' +
-        (l.recommendedAction || l.details ?
+        (l.recommendedAction || d.rows || d.special ?
           '<div class="lead-detail">' +
             (l.recommendedAction ? '<div class="detail-label">Next step</div><p class="next-step">' + esc(l.recommendedAction) + '</p>' : '') +
-            (l.details ? '<div class="detail-label">Project</div><dl class="spec">' + specRows(l.details) + '</dl>' : '') +
+            (d.rows ? '<div class="detail-label">Project</div><dl class="spec">' + d.rows + '</dl>' : '') +
+            (d.special ?
+              '<div class="detail-label">Special requests</div>' +
+              '<div class="special-req">' +
+                '<p class="special-text">' + esc(d.special) + '</p>' +
+                '<button class="show-toggle" type="button" data-toggle-special aria-expanded="false" hidden>Show more</button>' +
+              '</div>' : '') +
           '</div>' : '') +
         '<p class="row-note" data-note role="status" hidden></p>' +
       '</article>';
@@ -207,7 +229,31 @@
           '<p>Clear the filter, or wait. New leads land the moment they are scored.</p>' +
         '</div>'
       : list.map(cardHTML).join('');
+    syncSpecialToggles();
   }
+
+  /* Reveal a Show more toggle only where the two-line clamp cut something.
+     Measured by briefly unclamping and comparing heights: scrollHeight is
+     not trustworthy across the old and new line-clamp implementations.
+     Re-run after web fonts settle, since Inter reflows the text. */
+  function syncSpecialToggles() {
+    Array.prototype.forEach.call(el.list.querySelectorAll('.special-text'), function (p) {
+      if (p.classList.contains('expanded')) return;
+      var clampedH = p.clientHeight;
+      p.classList.add('expanded');
+      var fullH = p.clientHeight;
+      p.classList.remove('expanded');
+      p.nextElementSibling.hidden = fullH <= clampedH + 1;
+    });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { syncSpecialToggles(); });
+  }
+  var resyncTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resyncTimer);
+    resyncTimer = setTimeout(syncSpecialToggles, 150);
+  });
 
   function byId(id) {
     return state.leads.filter(function (l) { return l.id === id; })[0];
@@ -251,6 +297,17 @@
     state.showArchived = !state.showArchived;
     el.archived.setAttribute('aria-pressed', String(state.showArchived));
     render();
+  });
+
+  /* Special requests: two-line clamp with a per-card toggle. Expansion
+     only grows this card; nothing else reflows. */
+  el.list.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-toggle-special]');
+    if (!btn) return;
+    var text = btn.parentNode.querySelector('.special-text');
+    var expanded = text.classList.toggle('expanded');
+    btn.textContent = expanded ? 'Show less' : 'Show more';
+    btn.setAttribute('aria-expanded', String(expanded));
   });
 
   /* Archive: optimistic locally, reverted if the server disagrees. */

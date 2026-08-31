@@ -143,6 +143,7 @@
 .lead-card[data-archived="true"] .score,
 .lead-card[data-archived="true"] .next-step,
 .lead-card[data-archived="true"] .spec dd,
+.lead-card[data-archived="true"] .special-text,
 .lead-card[data-archived="true"] .lead-value { color: var(--ash); }
 
 .lead-top {
@@ -243,6 +244,57 @@
 .spec div { display: flex; gap: 8px; font-size: 14px; min-width: 0; }
 .spec dt { color: var(--ash); flex: none; }
 .spec dd { color: var(--paper); margin: 0; min-width: 0; }
+
+/* — special requests: full-width row, clamped to two lines — */
+
+.special-req { min-width: 0; }
+.special-text {
+  margin: 0;
+  color: var(--paper);
+  font-size: 15px;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  /* the prefixed combo only: the standard line-clamp property makes
+     Chrome discard the overflow, which breaks scrollHeight detection */
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.special-text.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.show-toggle {
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.033em;
+  color: var(--ash);
+  cursor: pointer;
+  transition: color .15s ease;
+}
+.show-toggle:hover { color: var(--paper); }
+
+/* neutral flag next to the lead name — deliberately not a temperature colour */
+.badge-missed {
+  display: inline-block;
+  vertical-align: 3px;
+  margin-left: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  background: var(--iron);
+  border-radius: var(--r-pill);
+  padding: 4px 10px;
+  box-shadow: var(--inset);
+  white-space: nowrap;
+}
 
 /* — empty — */
 
