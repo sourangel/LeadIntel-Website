@@ -245,6 +245,11 @@
 .spec dt { color: var(--ash); flex: none; }
 .spec dd { color: var(--paper); margin: 0; min-width: 0; }
 
+/* a segment too long to split into label/value spans the whole grid
+   and borrows the special-requests clamp, at the grid's type size */
+.spec-long { grid-column: 1 / -1; }
+.spec-long .special-text { font-size: 14px; }
+
 /* — special requests: full-width row, clamped to two lines — */
 
 .special-req { min-width: 0; }

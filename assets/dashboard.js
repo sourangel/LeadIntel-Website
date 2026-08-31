@@ -91,7 +91,24 @@
   /* details is one string: "Project type: New Pour • Project area: Driveway • …"
      "Special requests" is pulled out of the grid — it can carry a long
      AI-generated call summary, so it renders as its own clamped
-     full-width row instead of stretching the four-column spec. */
+     full-width row instead of stretching the four-column spec.
+
+     Voice-sourced leads can also carry a long free-text segment with
+     colons of its own. Splitting that on the first colon makes an
+     enormous label and a one-word-wide value column, so a segment whose
+     would-be label runs past LABEL_MAX characters, or which runs past
+     SEGMENT_MAX in total, keeps its text whole and takes the same
+     clamped full-width treatment inside the Project grid. */
+  var LABEL_MAX = 30;
+  var SEGMENT_MAX = 150;
+
+  function clampedRow(text) {
+    return '<div class="spec-long"><dd>' +
+      '<p class="special-text">' + esc(text) + '</p>' +
+      '<button class="show-toggle" type="button" data-toggle-special aria-expanded="false" hidden>Show more</button>' +
+    '</dd></div>';
+  }
+
   function parseDetails(details) {
     var rows = '';
     var special = '';
@@ -99,14 +116,17 @@
       var text = seg.trim();
       if (!text) return;
       var split = text.indexOf(': ');
-      if (split === -1) { rows += '<div><dd>' + esc(text) + '</dd></div>'; return; }
-      var label = text.slice(0, split);
-      var value = text.slice(split + 2);
+      var label = split === -1 ? '' : text.slice(0, split);
       if (label.trim().toLowerCase() === 'special requests') {
-        if (!special) special = value.trim();
+        if (!special) special = text.slice(split + 2).trim();
         return;
       }
-      rows += '<div><dt>' + esc(label) + '</dt><dd>' + esc(value) + '</dd></div>';
+      if (label.length > LABEL_MAX || text.length > SEGMENT_MAX) {
+        rows += clampedRow(text);
+        return;
+      }
+      if (split === -1) { rows += '<div><dd>' + esc(text) + '</dd></div>'; return; }
+      rows += '<div><dt>' + esc(label) + '</dt><dd>' + esc(text.slice(split + 2)) + '</dd></div>';
     });
     /* empty, "None", or whitespace hides the row entirely */
     if (/^none$/i.test(special)) special = '';
@@ -299,8 +319,9 @@
     render();
   });
 
-  /* Special requests: two-line clamp with a per-card toggle. Expansion
-     only grows this card; nothing else reflows. */
+  /* Special requests and unsplit long segments share the two-line clamp
+     with a per-card toggle. Expansion only grows this card; nothing
+     else reflows. */
   el.list.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-toggle-special]');
     if (!btn) return;
