@@ -71,22 +71,26 @@
   /* Reference leads across the trades LeadIntel chases. No particular
      order — a hot, a warm, and a cold each for concrete, plumbing,
      HVAC, and roofing, plus hot leads for solar, custom homes,
-     landscaping, and pest control. */
+     landscaping, and pest control.
+
+     `via` is the intake channel and defaults to 'Submitted' (web chat or
+     form). 'Missed call' rows came in through the voice agent, so the
+     queue shows both ways a lead can arrive. */
   var SAMPLES = [
     { init: 'CV', title: 'Stamped patio + driveway — Fountain Hills, AZ', est: 'est. $21,000', pill: 'pill-hot', label: 'Hot 92' },
-    { init: 'KS', title: 'Water heater replacement — Gilbert, AZ', est: 'est. $2,400', pill: 'pill-warm', label: 'Warm 68' },
+    { init: 'KS', title: 'Water heater replacement — Gilbert, AZ', est: 'est. $2,400', pill: 'pill-warm', label: 'Warm 68', via: 'Missed call' },
     { init: 'RB', title: 'Full tear-off reroof — Scottsdale, AZ', est: 'est. $24,000', pill: 'pill-hot', label: 'Hot 95' },
     { init: 'TM', title: 'Thermostat swap — Surprise, AZ', est: 'est. $350, below minimum', pill: 'pill-cold', label: 'Cold 24' },
     { init: 'JP', title: '12kW solar install — Peoria, AZ', est: 'est. $31,000', pill: 'pill-hot', label: 'Hot 90' },
     { init: 'AV', title: 'Whole-house repipe — Mesa, AZ', est: 'est. $12,800', pill: 'pill-hot', label: 'Hot 88' },
-    { init: 'LG', title: 'Sidewalk crack repair — Buckeye, AZ', est: 'est. $900, below minimum', pill: 'pill-cold', label: 'Cold 31' },
-    { init: 'RW', title: 'AC + furnace replacement — Phoenix, AZ', est: 'est. $14,200', pill: 'pill-hot', label: 'Hot 91' },
+    { init: 'LG', title: 'Sidewalk crack repair — Buckeye, AZ', est: 'est. $900, below minimum', pill: 'pill-cold', label: 'Cold 31', via: 'Missed call' },
+    { init: 'RW', title: 'AC + furnace replacement — Phoenix, AZ', est: 'est. $14,200', pill: 'pill-hot', label: 'Hot 91', via: 'Missed call' },
     { init: 'MC', title: 'Full yard redesign — Queen Creek, AZ', est: 'est. $19,500', pill: 'pill-hot', label: 'Hot 86' },
     { init: 'DH', title: 'Tile roof repair — Tempe, AZ', est: 'est. $3,900', pill: 'pill-warm', label: 'Warm 64' },
     { init: 'ES', title: 'Custom build, 2,800 sqft — Cave Creek, AZ', est: 'est. $580,000', pill: 'pill-hot', label: 'Hot 97' },
-    { init: 'BN', title: 'Dripping faucet — Casa Grande, AZ', est: 'est. $180, below minimum', pill: 'pill-cold', label: 'Cold 19' },
+    { init: 'BN', title: 'Dripping faucet — Casa Grande, AZ', est: 'est. $180, below minimum', pill: 'pill-cold', label: 'Cold 19', via: 'Missed call' },
     { init: 'GF', title: 'Mini-split install — Glendale, AZ', est: 'est. $4,800', pill: 'pill-warm', label: 'Warm 71' },
-    { init: 'PT', title: 'Termite treatment — Goodyear, AZ', est: 'est. $3,200', pill: 'pill-hot', label: 'Hot 84' },
+    { init: 'PT', title: 'Termite treatment — Goodyear, AZ', est: 'est. $3,200', pill: 'pill-hot', label: 'Hot 84', via: 'Missed call' },
     { init: 'JR', title: 'Backyard patio slab — Avondale, AZ', est: 'est. $7,200', pill: 'pill-warm', label: 'Warm 66' },
     { init: 'WK', title: 'Shingle patch — Wickenburg, AZ', est: 'est. $600, out of area', pill: 'pill-cold', label: 'Cold 27' }
   ];
@@ -97,6 +101,7 @@
 
   function spawnLead() {
     var s = SAMPLES[next];
+    var via = s.via || 'Submitted';
     next = (next + 1) % SAMPLES.length;
 
     var row = document.createElement('article');
@@ -105,7 +110,7 @@
       '<div class="lead-avatar" aria-hidden="true">' + s.init + '</div>' +
       '<div class="lead-body">' +
         '<div class="lead-title">' + s.title + '</div>' +
-        '<div class="lead-meta">Submitted 0:02 ago</div>' +
+        '<div class="lead-meta">' + via + ' 0:02 ago</div>' +
       '</div>' +
       '<span class="pill pill-scoring">Scoring…</span>';
     queue.insertBefore(row, queue.firstChild);
@@ -118,7 +123,7 @@
       var pill = row.querySelector('.pill');
       pill.className = 'pill ' + s.pill;
       pill.textContent = s.label;
-      row.querySelector('.lead-meta').textContent = 'Submitted 0:05 ago · ' + s.est;
+      row.querySelector('.lead-meta').textContent = via + ' 0:05 ago · ' + s.est;
     }, 2600);
 
     /* keep three rows: fade the oldest out, then drop it */

@@ -346,6 +346,18 @@ section { padding: var(--section-gap) 0; }
 
 /* — problem stages — */
 
+/* A scenario is one 4-stage story. #problem runs two of them back to back,
+   so the stage grid is scoped per scenario: .stage:first-child below picks
+   out stage 01 of each story, not just the first on the page. */
+.scenario + .scenario { margin-top: 56px; }
+.scenario-head {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
 .stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 
 .stage {
@@ -364,6 +376,15 @@ section { padding: var(--section-gap) 0; }
 .stage-state .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--smoke); margin-right: 8px; vertical-align: middle; }
 .stage:first-child .stage-state .dot { background: var(--signal-blue); }
 .stage:first-child .stage-state { color: var(--paper); }
+
+/* — two-column section body (copy beside a product panel) — */
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 60px;
+  align-items: start;
+}
 
 .pullquote {
   margin: 40px 0 0;
@@ -479,6 +500,7 @@ section { padding: var(--section-gap) 0; }
 
 @media (max-width: 980px) {
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+  .split { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }

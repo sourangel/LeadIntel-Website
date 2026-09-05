@@ -27,6 +27,7 @@
     </a>
     <nav class="nav" aria-label="Primary">
       <a href="index.html#problem">Problem</a>
+      <a href="index.html#voice">Voice</a>
       <a href="index.html#how-it-works">How it works</a>
       <a href="index.html#features">Features</a>
       <a href="pricing.html">Pricing</a>
@@ -41,6 +42,7 @@
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html#problem">Problem</a>
+    <a href="index.html#voice">Voice</a>
     <a href="index.html#how-it-works">How it works</a>
     <a href="index.html#features">Features</a>
     <a href="pricing.html">Pricing</a>
@@ -57,7 +59,7 @@
     <div class="wrap">
       <p class="eyebrow"><span class="dot"></span>Legal</p>
       <h1 class="h-lg">Privacy Policy</h1>
-      <p class="doc-updated">Last updated: August 23, 2026</p>
+      <p class="doc-updated">Last updated: September 5, 2026</p>
     </div>
   </section>
 
@@ -72,6 +74,9 @@
       <li><strong>Information you provide directly</strong> — such as your name, business name, email address, and phone number when you submit a demo request, sign up for the Service, or contact us.</li>
       <li><strong>Payment information</strong> — when you subscribe to the Service, payment is processed by Stripe. Stripe collects and stores your card or bank details directly; LeadIntel does not store full payment card numbers on our own systems. We retain billing records such as invoices, amounts, and payment status.</li>
       <li><strong>Information processed on behalf of our customers</strong> — when a contractor uses the Service, visitors to that contractor's own website may submit project details and contact information through the contractor's intake form or chatbot. That information belongs to the contractor. LeadIntel processes it solely on the contractor's instructions and stores it in a private database controlled by that contractor alone. We do not use it for our own purposes, do not message those visitors by SMS, and never share it with any other business.</li>
+<!-- LEGAL REVIEW NEEDED: voice recording — what the voice agent collects -->
+      <li><strong>Call recordings and transcripts</strong> — when a contractor enables the AI voice agent, inbound calls forwarded to the LeadIntel number are answered by an automated assistant that records and transcribes the call. This includes the audio recording, the transcript, and the details the caller provides during the call, such as their name, callback number, email address if they give one, service address, a description of the work, and how urgently they need it. See Section 4 for how this information is handled.</li>
+<!-- /LEGAL REVIEW NEEDED -->
       <li><strong>Usage data</strong> — including pages visited, time spent on the site, browser type, device information, and general analytics collected automatically when you use our website or dashboard.</li>
       <li><strong>Cookies and similar technologies</strong> — we use cookies to operate the website, remember preferences, and understand how visitors use our site. You can control cookies through your browser settings.</li>
     </ul>
@@ -80,6 +85,9 @@
     <p>We use the information we collect to:</p>
     <ul>
       <li>Provide, operate, and maintain the Service, including lead scoring, alerts, and the dashboard</li>
+<!-- LEGAL REVIEW NEEDED: voice recording — purpose of use -->
+      <li>Answer, record, and transcribe inbound calls where a contractor has enabled the AI voice agent, and turn what the caller says into a scored lead on that contractor's dashboard</li>
+<!-- /LEGAL REVIEW NEEDED -->
       <li>Communicate with you about your account, demo requests, and support questions</li>
       <li>Send SMS or email alerts you've requested as part of the Service</li>
       <li>Improve and develop new features</li>
@@ -89,32 +97,56 @@
     <h2>3. SMS and Text Messaging</h2>
     <p>If you opt in to receive text message alerts as part of the Service, your phone number is used solely to deliver those alerts. SMS alerts are sent only to LeadIntel CRM account holders about their own account activity. No mobile information will be shared with third parties or affiliates for marketing or promotional purposes. Phone numbers collected for SMS consent will not be sold, rented, or shared with any third party. Message and data rates may apply. You can opt out of SMS alerts at any time by replying STOP to any message you receive, or reply HELP for help. See our <a href="terms.html">Terms of Service</a> for full SMS program details.</p>
 
-    <h2>4. How We Share Information</h2>
+<!-- LEGAL REVIEW NEEDED: voice recording — consent notice, roles, and data flow -->
+    <h2>4. The AI Voice Agent, Call Recording, and Consent</h2>
+    <p>Contractors on a plan that includes the AI voice agent may forward their business phone line to a LeadIntel number so that calls they cannot answer are picked up by an automated assistant rather than going to voicemail. This section explains how those calls are handled.</p>
+
+    <h3>Notice to callers</h3>
+    <p>At the start of every call, the caller is told that they have reached an automated assistant and that the call is recorded. Laws governing consent to record a call vary from state to state, and some states require the consent of all parties to the call. Because callers may be located in any state, this notice is provided at the beginning of every call so that a caller who does not wish to be recorded can end the call before any details are collected. A caller who continues the call after that notice is understood to have consented to being recorded.</p>
+
+    <h3>What we collect from a call</h3>
+    <p>We collect the audio recording of the call, a transcript of the call, and the details the caller provides during it, which typically include their name, a callback number, an email address if they give one, the service address, a description of the work they need, and how urgently they need it.</p>
+
+    <h3>What reaches the contractor, and what does not</h3>
+    <p>These two are handled differently, and the difference is deliberate:</p>
+    <ul>
+      <li><strong>Derived lead data</strong> — the AI-generated summary of the call, the individual details extracted from it, any emergency flag, and the score — flows automatically into that contractor's private lead database and dashboard as part of the lead record, on every call. This is the same lead record described elsewhere in this policy, and it belongs to the contractor.</li>
+      <li><strong>Raw recordings and full transcripts</strong> are retained by LeadIntel and are <strong>not</strong> automatically delivered to the contractor. A contractor may request the recording or transcript for a call on their own account by emailing us at the address in Section 11, subject to the retention period in Section 6.</li>
+    </ul>
+
+    <h3>Roles</h3>
+    <p>LeadIntel stores and processes call recordings, transcripts, and derived lead data. Recordings and transcripts are held in the systems of our voice AI provider, identified in Section 5. The contractor owns the underlying lead and the customer relationship it represents. As with all information we process on behalf of our customers, LeadIntel acts as a service provider processing this data on the contractor's behalf and on the contractor's instructions, and we do not use it for our own purposes or share it with any other business.</p>
+<!-- /LEGAL REVIEW NEEDED -->
+
+    <h2>5. How We Share Information</h2>
     <p>LeadIntel CRM is a software tool used by contractors to manage inquiries they generate themselves. We do not generate, purchase, sell, broker, or distribute leads, and we do not route any inquiry from one business to another.</p>
     <p>We do not sell your personal information. We may share information with:</p>
     <ul>
-      <li><strong>Service providers</strong> who help us operate the Service (such as our automation, database, email, SMS, and payment processing providers)</li>
+      <li><strong>Service providers</strong> who help us operate the Service. These include our automation, database, email, SMS, and payment processing providers, together with <strong>Stripe</strong> for payment processing<!-- LEGAL REVIEW NEEDED: voice recording — sub-processor list -->, <strong>Twilio</strong> for telephony, and <strong>ElevenLabs</strong> as our voice AI provider, which processes call audio and holds the recordings and transcripts described in Section 4<!-- /LEGAL REVIEW NEEDED -->. Each is permitted to use the information only to provide services to us.</li>
       <li><strong>Legal authorities</strong> when required by law, or to protect our rights, safety, or property</li>
       <li><strong>A successor business</strong> in the event of a merger, acquisition, or sale of assets</li>
     </ul>
     <p>The above excludes text messaging originator opt-in data and consent; this information will not be shared with, sold to, or transferred to any third party.</p>
 
-    <h2>5. Data Retention</h2>
+    <h2>6. Data Retention</h2>
     <p>We retain information for as long as necessary to provide the Service and for legitimate business purposes, such as maintaining business records or complying with legal obligations.</p>
+<!-- LEGAL REVIEW NEEDED: voice recording — retention period -->
+    <p>Call recordings and transcripts created by the AI voice agent are retained for <strong>90 days</strong>. After 90 days, a recording or transcript that has not been requested may be deleted, and we cannot guarantee that it will be recoverable. If you need a recording or transcript from a call on your account, request it within that window at the address in Section 11. The derived lead data described in Section 4 is part of the lead record and is retained with the rest of that contractor's lead database rather than on this 90-day schedule.</p>
+<!-- /LEGAL REVIEW NEEDED -->
 
-    <h2>6. Your Choices</h2>
+    <h2>7. Your Choices</h2>
     <p>You can request access to, correction of, or deletion of your personal information by contacting us at the email below. You can opt out of SMS messages at any time by replying STOP. You can decline cookies through your browser settings, though some site features may not function properly without them.</p>
 
-    <h2>7. Data Security</h2>
+    <h2>8. Data Security</h2>
     <p>We use reasonable administrative, technical, and physical safeguards to protect the information we collect. No method of transmission or storage is 100% secure, and we cannot guarantee absolute security.</p>
 
-    <h2>8. Children's Privacy</h2>
+    <h2>9. Children's Privacy</h2>
     <p>The Service is not directed to individuals under 18. We do not knowingly collect personal information from children.</p>
 
-    <h2>9. Changes to This Policy</h2>
+    <h2>10. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. We'll post the updated version on this page with a new "Last updated" date.</p>
 
-    <h2>10. Contact Us</h2>
+    <h2>11. Contact Us</h2>
     <p>If you have questions about this Privacy Policy, contact us at <a href="mailto:hello@leadintelcrm.com">hello@leadintelcrm.com</a>.</p>
       </div>
     </div>
@@ -136,6 +168,7 @@
       <div class="footer-col">
         <h4>Product</h4>
         <ul>
+          <li><a href="index.html#voice">Voice agent</a></li>
           <li><a href="index.html#how-it-works">How it works</a></li>
           <li><a href="index.html#features">Features</a></li>
           <li><a href="pricing.html">Pricing</a></li>
