@@ -2,7 +2,7 @@
    Identity comes exclusively from the signed session cookie; the base
    is re-resolved server-side on every request. */
 const { listRecords } = require('./_lib/airtable');
-const { findAuthorizedContractor, resolveBaseId } = require('./_lib/contractors');
+const { findAuthorizedContractor, resolveBaseId, resolveTier } = require('./_lib/contractors');
 const { readSession } = require('./_lib/session');
 const cfg = require('./_lib/config');
 
@@ -24,6 +24,8 @@ module.exports = async (req, res) => {
     const baseId = await resolveBaseId(contractor.customerId);
     if (!baseId) return res.status(404).json({ ok: false, error: 'No lead base found for your account' });
 
+    const tier = await resolveTier(contractor.customerId);
+
     const records = await listRecords(baseId, cfg.LEADS_TABLE);
     const f = cfg.LEAD_FIELDS;
     const leads = records.map((r) => ({
@@ -44,10 +46,17 @@ module.exports = async (req, res) => {
       archived: r.fields[f.archived] === true,
       // ISO timestamp as Airtable stores it; older records may not have one,
       // in which case the client renders nothing.
-      created: r.fields[f.created] ? String(r.fields[f.created]) : ''
+      created: r.fields[f.created] ? String(r.fields[f.created]) : '',
+      callDurationSecs: numberOrNull(r.fields[f.callDurationSecs])
     }));
 
-    return res.status(200).json({ ok: true, email, leads });
+    return res.status(200).json({
+      ok: true,
+      email,
+      leads,
+      tier,
+      tierLimits: tier ? cfg.TIER_LIMITS[tier] : null
+    });
   } catch (err) {
     console.error('leads error:', err.message);
     return res.status(500).json({ ok: false, error: 'Could not load leads right now' });

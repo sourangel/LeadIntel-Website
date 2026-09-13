@@ -342,3 +342,109 @@
   letter-spacing: 0.033em;
   color: var(--paper);
 }
+
+/* — usage tracker —
+   Meter fill is Paper, the sanctioned neutral action fill (same as the
+   chips) — Signal Blue stays reserved for the CTA, and over-limit is
+   flagged in copy, never a second hue. */
+
+.usage {
+  background: var(--graphite);
+  border-radius: var(--r-card);
+  box-shadow: var(--inset);
+  padding: 24px;
+  margin-top: 16px;
+}
+.usage-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.usage-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  margin: 0;
+}
+.usage-plan {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.033em;
+  color: var(--ash);
+  border-radius: var(--r-pill);
+  box-shadow: var(--inset);
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+.usage-meters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.usage-meters.single { grid-template-columns: minmax(0, 1fr); }
+
+.meter-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+.meter-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.meter-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.033em;
+  color: var(--smoke);
+  white-space: nowrap;
+}
+.meter-value strong {
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: var(--paper);
+}
+.meter-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--inset);
+  overflow: hidden;
+}
+.meter-fill {
+  display: block;
+  height: 100%;
+  background: var(--paper);
+  border-radius: var(--r-pill);
+  transition: width .3s ease;
+}
+.meter-note {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.033em;
+  color: var(--ash);
+  margin: 9px 0 0;
+}
+.usage-foot {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.033em;
+  color: var(--smoke);
+  margin: 22px 0 0;
+}
+
+@media (max-width: 640px) {
+  .usage { padding: 20px; }
+  .usage-meters { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+}
