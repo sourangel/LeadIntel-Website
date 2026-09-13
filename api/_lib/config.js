@@ -7,6 +7,7 @@ module.exports = {
   CUSTOMERS_TABLE: 'Customers',
   CUSTOMER_ID_FIELD: 'Customer ID',
   CUSTOMER_BASE_ID_FIELD: 'Base ID',
+  CUSTOMER_TIER_FIELD: 'Tier',
 
   AUTHORIZED_TABLE: 'AuthorizedContractors',
   AUTHORIZED_EMAIL_FIELD: 'Email',
@@ -34,12 +35,19 @@ module.exports = {
     // every customer base, or archive writes fail with an Airtable 422.
     archived: 'Archived',
     // Read-only timestamp. Bases predating the field simply omit it.
-    created: 'Created'
+    created: 'Created',
+    callDurationSecs: 'Call Duration (sec)'
   },
 
   // The only values writable into the Status field. Anything else is
   // rejected outright — arbitrary text never reaches Airtable.
   LEAD_STATUSES: ['New', 'Contacted', 'Won', 'Lost'],
+
+  TIER_LIMITS: {
+    Starter: { leads: 50,  voiceMinutes: 0 },
+    Growth:  { leads: 125, voiceMinutes: 300 },
+    Pro:     { leads: 250, voiceMinutes: 600 }
+  },
 
   MAGIC_LINK_TTL_MS: 15 * 60 * 1000,        // 15 minutes
   SESSION_TTL_MS: 30 * 24 * 60 * 60 * 1000, // 30 days

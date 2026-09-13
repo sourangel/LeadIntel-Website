@@ -23,7 +23,10 @@
     account: document.querySelector('[data-account]'),
     sort: document.querySelector('[data-sort]'),
     archived: document.querySelector('[data-archived-toggle]'),
-    chips: Array.prototype.slice.call(document.querySelectorAll('[data-filter]'))
+    chips: Array.prototype.slice.call(document.querySelectorAll('[data-filter]')),
+    usage: document.querySelector('[data-usage]'),
+    usagePlan: document.querySelector('[data-usage-plan]'),
+    usageMeters: document.querySelector('[data-usage-meters]')
   };
 
   var money = new Intl.NumberFormat('en-US', {
@@ -60,6 +63,16 @@
     if (!raw) return null;
     var t = new Date(raw).getTime();
     return isFinite(t) ? t : null;
+  }
+
+  /* True when the record's created timestamp falls in the current calendar
+     month (local time) — the window the usage tracker measures against.
+     Records with no timestamp are excluded. */
+  function inCurrentMonth(raw) {
+    var t = createdTime(raw);
+    if (t == null) return false;
+    var d = new Date(t), now = new Date();
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
   }
 
   function formatDate(raw) {
@@ -183,6 +196,62 @@
       var node = document.querySelector('[data-stat="' + k + '"]');
       if (node) node.textContent = stats[k];
     });
+  }
+
+  /* Leads captured and voice minutes used in the current calendar month.
+     callDurationSecs is per-lead seconds of talk time; anything missing or
+     non-numeric contributes nothing. Archived leads still count — archiving
+     is a workflow action, not an un-capture. */
+  function usageThisMonth() {
+    var leads = 0, voiceSecs = 0;
+    state.leads.forEach(function (l) {
+      if (!inCurrentMonth(l.created)) return;
+      leads++;
+      if (typeof l.callDurationSecs === 'number' && isFinite(l.callDurationSecs)) {
+        voiceSecs += l.callDurationSecs;
+      }
+    });
+    return { leads: leads, voiceMinutes: Math.round(voiceSecs / 60) };
+  }
+
+  function meterHTML(id, label, used, cap) {
+    var pct = cap > 0 ? (used / cap) * 100 : 0;
+    /* keep a sliver visible for any non-zero usage; never overflow the track */
+    var width = used > 0 ? Math.max(2, Math.min(100, pct)) : 0;
+    var over = used > cap;
+    var valuetext = used + ' of ' + cap + ' ' + label.toLowerCase() + ' this month';
+    return '' +
+      '<div class="meter">' +
+        '<div class="meter-top">' +
+          '<span class="meter-label" id="ml-' + esc(id) + '">' + esc(label) + '</span>' +
+          '<span class="meter-value"><strong>' + esc(used) + '</strong> / ' + esc(cap) + '</span>' +
+        '</div>' +
+        '<div class="meter-track" role="progressbar" aria-labelledby="ml-' + esc(id) + '"' +
+          ' aria-valuemin="0" aria-valuemax="' + esc(cap) + '" aria-valuenow="' + esc(used) + '"' +
+          ' aria-valuetext="' + esc(valuetext) + '">' +
+          '<span class="meter-fill" style="width:' + width + '%"></span>' +
+        '</div>' +
+        (over ? '<p class="meter-note">Over your monthly limit — reach out about a higher tier.</p>' : '') +
+      '</div>';
+  }
+
+  /* Shown only when the API returns a recognized tier and its limits;
+     an older response shape or unknown tier simply leaves it hidden. */
+  function renderUsage(tier, limits) {
+    if (!el.usage) return;
+    if (!tier || !limits) { el.usage.hidden = true; return; }
+
+    var used = usageThisMonth();
+    var meters = [meterHTML('leads', 'Leads', used.leads, limits.leads)];
+    var hasVoice = typeof limits.voiceMinutes === 'number' && limits.voiceMinutes > 0;
+    if (hasVoice) {
+      meters.push(meterHTML('voice', 'Voice minutes', used.voiceMinutes, limits.voiceMinutes));
+    }
+
+    el.usagePlan.textContent = tier + ' plan';
+    el.usageMeters.className = 'usage-meters' + (hasVoice ? '' : ' single');
+    el.usageMeters.innerHTML = meters.join('');
+    el.usage.hidden = false;
   }
 
   function statusOptions(l) {
@@ -425,6 +494,7 @@
       el.account.textContent = data.email || '';
       state.leads = (data.leads || []).slice();
       renderStats();
+      renderUsage(data.tier, data.tierLimits);
       render();
     })
     .catch(function (err) {

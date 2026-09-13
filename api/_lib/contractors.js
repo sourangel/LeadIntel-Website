@@ -39,4 +39,15 @@ async function resolveBaseId(customerId) {
   return typeof baseId === 'string' && /^app[A-Za-z0-9]+$/.test(baseId) ? baseId : null;
 }
 
-module.exports = { hubBaseId, normalizeEmail, findAuthorizedContractor, resolveBaseId };
+/* Returns the contractor's tier name (a key of cfg.TIER_LIMITS), or null. */
+async function resolveTier(customerId) {
+  const records = await listRecords(hubBaseId(), cfg.CUSTOMERS_TABLE, {
+    filterByFormula: `{${cfg.CUSTOMER_ID_FIELD}} = ${formulaString(customerId)}`,
+    maxRecords: 1
+  });
+  if (!records.length) return null;
+  const tier = records[0].fields[cfg.CUSTOMER_TIER_FIELD];
+  return typeof tier === 'string' && Object.prototype.hasOwnProperty.call(cfg.TIER_LIMITS, tier) ? tier : null;
+}
+
+module.exports = { hubBaseId, normalizeEmail, findAuthorizedContractor, resolveBaseId, resolveTier };
