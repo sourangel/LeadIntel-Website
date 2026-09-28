@@ -49,10 +49,19 @@
   function estValueNumber(raw) {
     if (raw == null || raw === '') return 0;
     if (typeof raw === 'number') return isFinite(raw) ? raw : 0;
-    var tokens = String(raw).match(/\d[\d,]*(?:\.\d+)?/g);
+    var tokens = String(raw).match(/\d[\d,]*(?:\.\d+)?\s*[KkMm]?/g);
     if (!tokens) return 0;
     var nums = tokens
-      .map(function (t) { return parseFloat(t.replace(/,/g, '')); })
+      .map(function (t) {
+        var m = t.match(/^([\d,]*\.?\d+)\s*([KkMm]?)$/);
+        if (!m) return NaN;
+        var n = parseFloat(m[1].replace(/,/g, ''));
+        if (!isFinite(n)) return NaN;
+        var suffix = m[2].toLowerCase();
+        if (suffix === 'k') n *= 1e3;
+        else if (suffix === 'm') n *= 1e6;
+        return n;
+      })
       .filter(function (n) { return isFinite(n); });
     if (!nums.length) return 0;
     if (nums.length === 1) return nums[0];
